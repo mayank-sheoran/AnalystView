@@ -10,20 +10,23 @@ import {
 // Import files
 import styles from './styles';
 
-const BackBtn = props => {
+const Header = ({title, theme, color, backBtn, navigation, backScreen}) => {
   const BackIcon = props => <Icon {...props} name="arrow-back" />;
   const BackAction = () => {
-    const appearance = props.theme === 'dark' ? 'control' : 'default';
+    const appearance = theme === 'dark' ? 'control' : 'default';
+    if (!backBtn) {
+      return null;
+    }
     return (
       <TopNavigationAction
         icon={BackIcon}
         appearance={appearance}
-        onPress={() => props.navigation.navigate(props.backScreen)}
+        onPress={() => navigation.navigate(backScreen)}
       />
     );
   };
   const GetStatusBar = ({backgroundColor}) => {
-    const barStyle = props.theme === 'dark' ? 'light-content' : 'dark-content';
+    const barStyle = theme === 'dark' ? 'light-content' : 'dark-content';
     return (
       <View style={[styles.statusBar, {backgroundColor}]}>
         <SafeAreaView>
@@ -36,17 +39,15 @@ const BackBtn = props => {
       </View>
     );
   };
-  const txtColor = props.theme === 'dark' ? 'white' : 'black';
+  const txtColor = theme === 'dark' ? 'white' : 'black';
   return (
     <>
-      <GetStatusBar backgroundColor={props.color} />
+      <GetStatusBar backgroundColor={color} />
       <TopNavigation
-        style={(styles.baseContainer, {backgroundColor: props.color})}
+        style={(styles.baseContainer, {backgroundColor: color})}
         accessoryLeft={BackAction}
         title={() => (
-          <Text style={{color: txtColor, fontWeight: '700'}}>
-            {props.title}
-          </Text>
+          <Text style={{color: txtColor, fontWeight: '700'}}>{title}</Text>
         )}
         alignment="center"
       />
@@ -54,4 +55,4 @@ const BackBtn = props => {
   );
 };
 
-export default BackBtn;
+export default Header;

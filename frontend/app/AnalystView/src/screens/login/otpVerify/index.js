@@ -4,7 +4,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import auth from '@react-native-firebase/auth';
 
 // Import Files
-import BackBtn from '../../../components/backBtn';
+import Header from '../../../components/Header';
 import notify from '../../../components/notify';
 import styles from './styles';
 import {COLORS} from '../../../assets/theme';
@@ -72,8 +72,9 @@ const OtpVerify = ({route, navigation}) => {
 
   return (
     <View style={styles.baseContainer}>
-      <BackBtn
+      <Header
         title="Verify"
+        backBtn={true}
         navigation={navigation}
         backScreen="welcome"
         color={COLORS.blue}
