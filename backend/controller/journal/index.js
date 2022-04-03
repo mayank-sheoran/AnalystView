@@ -1,34 +1,11 @@
-const { v4: uuidv4 } = require('uuid');
 const { successResponse, errorResponse } = require('../../utils/response');
 const JournalDB = require('../../db/journal');
 
 exports.saveToJournal = (req, res) => {
-  const {
-    userId,
-    date,
-    strategy,
-    tradeType,
-    trade,
-    amount,
-    percentage,
-    description,
-    bookmark,
-  } = req;
-  const journalData = new JournalDB({
-    userId,
-    tradeId: uuidv4(),
-    date,
-    strategy,
-    tradeType,
-    trade,
-    amount,
-    percentage,
-    description,
-    bookmark,
-  });
+  const journalData = new JournalDB(req.body);
   journalData.save().then(() => {
     successResponse(res, 'Added to Journal');
-  }).catch(() => errorResponse(res, 'Failed to add in journal'));
+  }).catch((err) => errorResponse(res, err));
 };
 
 exports.getAllTrades = (req, res) => {

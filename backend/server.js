@@ -1,6 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+
+// Import files
+const journalRoutes = require('./routes/journal');
+
 require('dotenv').config();
 
 const app = express();
@@ -9,6 +13,9 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 
 const http = require('http').createServer(app);
+
+// Routes
+app.use(journalRoutes);
 
 mongoose
   .connect(

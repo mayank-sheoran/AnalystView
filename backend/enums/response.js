@@ -1,5 +1,7 @@
-// eslint-disable-next-line import/prefer-default-export
-export const Response = {
+const Response = {
   SUCCESS: 'success',
   ERROR: 'error',
 };
+
+// eslint-disable-next-line import/prefer-default-export
+module.exports = { Response };
