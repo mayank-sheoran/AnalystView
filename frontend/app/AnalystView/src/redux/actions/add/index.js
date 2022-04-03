@@ -9,6 +9,8 @@ import {
   SET_PNL_PERC,
   SET_DESCRIPTION,
   SET_BOOKMARK_STATUS,
+  SET_LOADING_STATUS,
+  SET_SNAPSHOT_UUID,
 } from '../../constants/add';
 
 export const setDate = date => {
@@ -60,7 +62,7 @@ export const setPnl = pnl => {
   };
 };
 
-export const setPnlPern = pnlPerc => {
+export const setPnlPerc = pnlPerc => {
   return {
     type: SET_PNL_PERC,
     payload: pnlPerc,
@@ -78,5 +80,19 @@ export const setBookmark = status => {
   return {
     type: SET_BOOKMARK_STATUS,
     payload: status,
+  };
+};
+
+export const setLoadings = (loadingType, loadingStatus) => {
+  return {
+    type: SET_LOADING_STATUS,
+    payload: {loadingType, loadingStatus},
+  };
+};
+
+export const setSnapshotUUID = uuid => {
+  return {
+    type: SET_SNAPSHOT_UUID,
+    payload: uuid,
   };
 };

@@ -4,19 +4,22 @@ const windowHeight = Dimensions.get('window').height;
 
 export default StyleSheet.create({
   base: {
-    height: 0.65 * windowHeight,
-    width: '100%',
+    height: 0.8 * windowHeight,
+    marginBottom: 400,
+    width: '90%',
+    alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   userStrategies: {
     alignSelf: 'flex-start',
-    height: 0.4 * windowHeight,
+    flex: 1,
     width: '100%',
   },
   buttonsContainer: {
     width: '100%',
+    height: 160,
   },
   addStrategyContainer: {
     flexDirection: 'column',

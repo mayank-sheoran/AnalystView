@@ -1,114 +1,78 @@
 import React from 'react';
 import {View, Text, ScrollView} from 'react-native';
-import DatePicker from 'react-native-date-picker';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Button, Icon} from '@ui-kitten/components';
+import {Button, CheckBox} from '@ui-kitten/components';
 
 // Import Files
+import {setBookmark} from '../../../redux/actions/add';
+import SelectDate from './selectDate';
 import Header from '../../../components/Header';
+import {HEADER_THEME} from '../../../components/Header/constants';
 import {COLORS} from '../../../assets/theme';
 import styles from './styles';
-import StrategySelect from './strategySelect';
-import {
-  setDate,
-  showDatePicker,
-  showStrategySelect,
-  setTradeType,
-  setTrade,
-} from '../../../redux/actions/add';
-import {trade, tradeType} from './constants';
+import TradeInputs from './tradeInputs';
+import TradeTypeBtn from './tradeTypeBtn';
+import SelectImage from './selectImage';
 
-const AddToJournal = ({
-  add,
-  setDate,
-  showDatePicker,
-  showStrategySelect,
-  setTradeType,
-  setTrade,
-}) => {
-  const profitIcon = props => {
-    return <Icon {...props} name="trending-up" />;
+const AddToJournal = ({add, navigation, setBookmark}) => {
+  const isStrategySelected = () => {
+    return Object.values(add.strategiesUsed).find(value => value === true);
   };
-  const lossIcon = props => {
-    return <Icon {...props} name="trending-down" />;
+  const getStrategyText = () => {
+    let text = '';
+    const strategies = add.strategiesUsed;
+    const empty = isStrategySelected();
+    if (empty) {
+      Object.keys(strategies).forEach(strategy => {
+        if (strategies[strategy] === true) {
+          text += strategy + ', ';
+        }
+      });
+      if (text.length > 30) {
+        return text.substring(0, 30) + '...';
+      }
+      return text.substring(0, text.length - 2);
+    }
+    return 'Select Strategy';
   };
-  console.log(add);
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: COLORS.white}}>
       <Header
         title="Add To Journal"
-        theme="dark"
+        theme={HEADER_THEME.DARK}
         color={COLORS.blue}
         backBtn={false}
       />
-      <View style={{flex: 1}}>
-        <ScrollView>
-          {add.show.selectStrategy && <StrategySelect />}
-          <View style={styles.inputContainer}>
-            <Text style={styles.txt}>Date</Text>
-            <Button size="small" onPress={() => showDatePicker(true)}>
-              Select Date
-            </Button>
-            <DatePicker
-              modal
-              style={styles.datePicker}
-              open={add.show.datePicker}
-              date={add.date}
-              onConfirm={date => {
-                setDate(date);
-                showDatePicker(false);
-              }}
-              onCancel={() => {
-                showDatePicker(false);
-              }}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.txt}>Strategy</Text>
-            <Button size="small" onPress={() => showStrategySelect(true)}>
-              Select Strategy
-            </Button>
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.txt}>Trade Type</Text>
-            <Button
-              style={styles.btn}
-              appearance={
-                add.tradeType === tradeType.PAPER_TRADE ? 'filled' : 'outline'
-              }
-              onPress={() => setTradeType(tradeType.PAPER_TRADE)}
-              size="small">
-              Paper
-            </Button>
-            <Button
-              style={styles.btn}
-              appearance={
-                add.tradeType === tradeType.REAL_TRADE ? 'filled' : 'outline'
-              }
-              onPress={() => setTradeType(tradeType.REAL_TRADE)}
-              size="small">
-              Real
-            </Button>
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.txt}>Trade</Text>
-            <Button
-              style={styles.btn}
-              appearance={add.trade === trade.PROFIT ? 'filled' : 'outline'}
-              onPress={() => setTrade(trade.PROFIT)}
-              size="small">
-              Profit
-            </Button>
-            <Button
-              style={styles.btn}
-              appearance={add.trade === trade.LOSS ? 'filled' : 'outline'}
-              onPress={() => setTrade(trade.LOSS)}
-              size="small">
-              Loss
-            </Button>
-          </View>
-        </ScrollView>
+      <ScrollView>
+        <SelectDate />
+        <Button
+          style={{
+            width: '90%',
+            alignSelf: 'center',
+          }}
+          size="medium"
+          status={isStrategySelected() ? 'primary' : 'danger'}
+          appearance="outline"
+          onPress={() => navigation.navigate('strategy')}>
+          {getStrategyText()}
+        </Button>
+        <TradeTypeBtn />
+        <TradeInputs />
+        <SelectImage />
+        <View style={[styles.inputContainer, {height: 40, marginBottom: 80}]}>
+          <Text style={styles.txt}>Bookmark</Text>
+          <CheckBox
+            checked={add.bookmark}
+            onChange={nextChecked => setBookmark(nextChecked)}
+          />
+        </View>
+      </ScrollView>
+      <View style={styles.submitBtnContainer}>
+        <Button style={styles.submitBtn} size="medium">
+          Add To Journal
+        </Button>
       </View>
     </View>
   );
@@ -122,11 +86,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      setDate,
-      showDatePicker,
-      showStrategySelect,
-      setTradeType,
-      setTrade,
+      setBookmark,
     },
     dispatch,
   );

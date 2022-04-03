@@ -5,24 +5,20 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 // Import Files
-import Popup from '../../../../components/popup';
 import Loading from '../../../../components/loading';
 import styles from './styles';
+import {HEADER_THEME} from '../../../../components/Header/constants';
+import Header from '../../../../components/Header';
 import {COLORS} from '../../../../assets/theme';
-import {
-  setStrategiesUsed,
-  showStrategySelect,
-} from '../../../../redux/actions/add';
+import {setStrategiesUsed} from '../../../../redux/actions/add';
 
-const StrategySelect = ({add, setStrategiesUsed, showStrategySelect}) => {
+const SelectStrategy = ({add, navigation, setStrategiesUsed}) => {
   const [loading, setLoading] = useState(false);
-  const [markedStrategies, setMarkedStrategies] = useState({});
   const [allStrategies, setAllStrategies] = useState([]);
   const [newStrategy, setNewStrategy] = useState('');
 
   useEffect(() => {
     setLoading(true);
-    setMarkedStrategies(add.strategiesUsed);
     setAllStrategies(['OpenSpace', 'AscendingTriangle', 'DescendingTriangle']);
     setTimeout(() => {
       setLoading(false);
@@ -32,12 +28,14 @@ const StrategySelect = ({add, setStrategiesUsed, showStrategySelect}) => {
 
   const getUserStrategiesCard = allStrategies.map(strategy => {
     return (
-      <View style={{flexDirection: 'column', width: '100%', marginTop: 10}}>
+      <View
+        key={strategy}
+        style={{flexDirection: 'column', width: '100%', marginTop: 10}}>
         <CheckBox
-          checked={markedStrategies[strategy]}
+          checked={add.strategiesUsed[strategy]}
           onChange={nextChecked => {
-            setMarkedStrategies({
-              ...markedStrategies,
+            setStrategiesUsed({
+              ...add.strategiesUsed,
               [strategy]: nextChecked,
             });
           }}>
@@ -46,11 +44,6 @@ const StrategySelect = ({add, setStrategiesUsed, showStrategySelect}) => {
       </View>
     );
   });
-
-  const handleSaveMarkedStrategy = () => {
-    setStrategiesUsed(markedStrategies);
-    showStrategySelect(false);
-  };
 
   const handleAddNewStrategy = () => {
     setLoading(true);
@@ -63,9 +56,16 @@ const StrategySelect = ({add, setStrategiesUsed, showStrategySelect}) => {
   };
 
   return (
-    <Popup>
+    <View style={{flex: 1, backgroundColor: COLORS.white}}>
+      <Header
+        title="Your Strategies"
+        theme={HEADER_THEME.LIGHT}
+        color={COLORS.white}
+        backBtn={true}
+        navigation={navigation}
+        backScreen="addToJournal"
+      />
       <View style={styles.base}>
-        <Text style={{fontWeight: '700', fontSize: 16}}>Your Strategies</Text>
         <Loading loading={loading}>
           <View style={styles.userStrategies}>
             <ScrollView>{getUserStrategiesCard}</ScrollView>
@@ -94,24 +94,12 @@ const StrategySelect = ({add, setStrategiesUsed, showStrategySelect}) => {
                 width: '100%',
                 justifyContent: 'space-between',
                 marginTop: 10,
-              }}>
-              <Button
-                style={{width: '45%'}}
-                size="medium"
-                onPress={() => showStrategySelect(false)}>
-                Close
-              </Button>
-              <Button
-                style={{width: '45%'}}
-                size="medium"
-                onPress={handleSaveMarkedStrategy}>
-                Save
-              </Button>
-            </View>
+              }}
+            />
           </View>
         </Loading>
       </View>
-    </Popup>
+    </View>
   );
 };
 
@@ -124,9 +112,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       setStrategiesUsed,
-      showStrategySelect,
     },
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(StrategySelect);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectStrategy);

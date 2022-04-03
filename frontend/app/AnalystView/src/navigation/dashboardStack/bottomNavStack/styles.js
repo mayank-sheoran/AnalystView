@@ -2,14 +2,14 @@ import {StyleSheet} from 'react-native';
 import {COLORS} from '../../../assets/theme';
 export default StyleSheet.create({
   tabBar: {
-    position: 'absolute',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    bottom: 40,
-    height: 70,
-    left: 25,
-    right: 25,
+    alignSelf: 'center',
+    marginBottom: 30,
+    marginTop: 10,
+    height: 60,
+    width: '90%',
     borderRadius: 15,
     backgroundColor: COLORS.white,
     shadowColor: '#171717',

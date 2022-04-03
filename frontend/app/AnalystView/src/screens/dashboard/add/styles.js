@@ -8,12 +8,20 @@ export default StyleSheet.create({
     fontWeight: '700',
     color: COLORS.black,
   },
-  inputContainer: {
+  twoBtnContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     width: '90%',
-    marginLeft: 20,
-    marginTop: 30,
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    width: '90%',
+    marginTop: 10,
+    alignSelf: 'center',
+    alignItems: 'center',
   },
   datePicker: {
     position: 'absolute',
@@ -24,10 +32,21 @@ export default StyleSheet.create({
     color: COLORS.blue,
   },
   btn: {
-    // backgroundColor: COLORS.black,
-    // borderColor: COLORS.black,
     marginRight: 20,
     width: 90,
     fontSize: 8,
+  },
+  submitBtn: {
+    width: 250,
+    backgroundColor: COLORS.black,
+    borderColor: COLORS.black,
+  },
+  submitBtnContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 10,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderColor: COLORS.light_grey,
   },
 });

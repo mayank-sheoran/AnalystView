@@ -9,6 +9,8 @@ import {
   SET_PNL_PERC,
   SET_DESCRIPTION,
   SET_BOOKMARK_STATUS,
+  SET_LOADING_STATUS,
+  SET_SNAPSHOT_UUID,
 } from '../../constants/add';
 
 const initialState = {
@@ -19,11 +21,15 @@ const initialState = {
     infoSnapshot: false,
     datePicker: false,
   },
-  strategiesUsed: [],
+  loadings: {
+    upload: false,
+  },
+  strategiesUsed: {},
   tradeType: '',
   trade: '',
   pnl: 0,
   pnlPerc: 0,
+  snapshotUUID: null,
   description: '',
   bookmark: false,
 };
@@ -79,6 +85,19 @@ export const addReducer = (state = initialState, action) => {
       return {
         ...state,
         bookmark: action.payload,
+      };
+    case SET_LOADING_STATUS:
+      return {
+        ...state,
+        loadings: {
+          ...state.loadings,
+          [action.payload.loadingType]: action.payload.loadingStatus,
+        },
+      };
+    case SET_SNAPSHOT_UUID:
+      return {
+        ...state,
+        snapshotUUID: action.payload,
       };
     default:
       return state;

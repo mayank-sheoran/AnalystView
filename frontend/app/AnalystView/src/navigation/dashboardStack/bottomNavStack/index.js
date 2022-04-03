@@ -4,12 +4,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon} from '@ui-kitten/components';
 
 // Import files
-import AddToJournal from '../../../screens/dashboard/add';
 import Analyse from '../../../screens/dashboard/analyze';
 import Strategy from '../../../screens/dashboard/strategy';
 import Setting from '../../../screens/dashboard/setting';
 import {COLORS} from '../../../assets/theme';
 import styles from './styles';
+import AddNavStack from '../navStack/add';
 
 const Tab = createBottomTabNavigator();
 
@@ -72,7 +72,7 @@ const BottomNavStack = () => {
       }}>
       <Tab.Screen
         name="add"
-        component={AddToJournal}
+        component={AddNavStack}
         options={{
           tabBarLabel: 'Add',
         }}
@@ -84,13 +84,13 @@ const BottomNavStack = () => {
           tabBarLabel: 'Analyze',
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="strategy"
         component={Strategy}
         options={{
           tabBarLabel: 'Stategy',
         }}
-      />
+      /> */}
       <Tab.Screen
         name="setting"
         component={Setting}
