@@ -7,7 +7,7 @@ const JournalData = new Schema({
   userId: { required: true, type: String },
   tradeId: { required: true, type: String },
   date: { type: Date, default: new Date() },
-  strategiesUsed: { required: true, type: Object },
+  strategiesUsed: { required: true, type: Array },
   tradeType: { required: true, enum: tradeType, type: String },
   trade: { required: true, enum: trade, type: String },
   pnl: { required: true, type: Number },
