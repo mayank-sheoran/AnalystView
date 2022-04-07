@@ -52,7 +52,7 @@ const TradeInputs = ({add, setDesc, setPnl, setPnlPerc}) => {
           style={{width: 200}}
           placeholder="Optional"
           multiline={true}
-          value={add.desc}
+          value={add.description}
           onChangeText={nextValue => setDesc(nextValue)}
         />
         <TouchableOpacity style={{marginLeft: 10}}>

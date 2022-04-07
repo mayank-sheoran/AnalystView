@@ -11,6 +11,7 @@ import {
   SET_BOOKMARK_STATUS,
   SET_LOADING_STATUS,
   SET_SNAPSHOT_UUID,
+  RESET_STATE,
 } from '../../constants/add';
 
 export const setDate = date => {
@@ -94,5 +95,12 @@ export const setSnapshotUUID = uuid => {
   return {
     type: SET_SNAPSHOT_UUID,
     payload: uuid,
+  };
+};
+
+export const resetState = () => {
+  return {
+    type: RESET_STATE,
+    payload: null,
   };
 };

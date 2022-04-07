@@ -11,6 +11,7 @@ import {
   SET_BOOKMARK_STATUS,
   SET_LOADING_STATUS,
   SET_SNAPSHOT_UUID,
+  RESET_STATE,
 } from '../../constants/add';
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
   },
   loadings: {
     upload: false,
+    addToJournal: false,
   },
   strategiesUsed: {},
   tradeType: '',
@@ -99,6 +101,8 @@ export const addReducer = (state = initialState, action) => {
         ...state,
         snapshotUUID: action.payload,
       };
+    case RESET_STATE:
+      return initialState;
     default:
       return state;
   }
