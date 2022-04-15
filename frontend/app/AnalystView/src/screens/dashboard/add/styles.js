@@ -2,6 +2,9 @@ import {StyleSheet} from 'react-native';
 import {COLORS} from '../../../assets/theme';
 
 export default StyleSheet.create({
+  base: {
+    flex: 1,
+  },
   txt: {
     fontSize: 14,
     width: 100,
@@ -42,10 +45,10 @@ export default StyleSheet.create({
     borderColor: COLORS.black,
   },
   submitBtnContainer: {
+    height: 60,
+    justifyContent: 'center',
     width: '100%',
     alignItems: 'center',
-    marginBottom: 10,
-    paddingTop: 20,
     borderTopWidth: 1,
     borderColor: COLORS.light_grey,
   },

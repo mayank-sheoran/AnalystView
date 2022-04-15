@@ -6,6 +6,7 @@ export const SET_STRATEGIES_USED = 'SET_STRATEGIES_USED';
 export const SET_TRADE_TYPE = 'SET_TRADE_TYPE';
 export const SET_TRADE = 'SET_TRADE';
 export const SET_PNL = 'SET_PNL';
+export const SET_TRADE_INPUTS = 'SET_TRADE_INPUTS';
 export const SET_PNL_PERC = 'SET_PNL_PERC';
 export const SET_DESCRIPTION = 'SET_DESCRIPTION';
 export const SET_BOOKMARK_STATUS = 'SET_BOOKMARK_STATUS';

@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import auth from '@react-native-firebase/auth';
+import axios from 'axios';
 
 // Import Files
-import Header from '../../../components/Header';
+import Header from '../../../components/header';
 import notify from '../../../components/notify';
 import styles from './styles';
 import {COLORS} from '../../../assets/theme';
@@ -22,7 +23,6 @@ const OtpVerify = ({route, navigation}) => {
     setLoading(true);
     try {
       await confirm.confirm(code);
-      setLoading(false);
     } catch (error) {
       setLoading(false);
       notify({heading: 'Error', subHeading: 'Wrong OTP'});
@@ -81,7 +81,7 @@ const OtpVerify = ({route, navigation}) => {
         theme="dark"
       />
       <View style={styles.otpVerifyContainer}>
-        <Text style={styles.text}>Code sent to +918950577400</Text>
+        <Text style={styles.text}>{`Code sent to ${phoneNumber}`}</Text>
         <Loading loading={loading}>
           <OTPInputView
             style={styles.otpInput}

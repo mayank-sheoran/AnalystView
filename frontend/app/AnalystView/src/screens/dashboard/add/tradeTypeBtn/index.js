@@ -7,9 +7,9 @@ import {bindActionCreators} from 'redux';
 // Import files
 import styles from './styles';
 import {setTradeType, setTrade} from '../../../../redux/actions/add';
-import {tradeType, trade} from '../constants';
+import {TRADE_TYPE, TRADE} from '../constants';
 
-const TradeTypeBtn = ({add, setTrade, setTradeType}) => {
+const TradeTypeBtn = ({trade, tradeType, setTrade, setTradeType}) => {
   const profitIcon = props => {
     return <Icon {...props} name="trending-up" />;
   };
@@ -29,9 +29,9 @@ const TradeTypeBtn = ({add, setTrade, setTradeType}) => {
           style={{width: '48%'}}
           accessoryLeft={paperTradeIcon}
           appearance={
-            add.tradeType === tradeType.PAPER_TRADE ? 'filled' : 'outline'
+            tradeType === TRADE_TYPE.PAPER_TRADE ? 'filled' : 'outline'
           }
-          onPress={() => setTradeType(tradeType.PAPER_TRADE)}
+          onPress={() => setTradeType(TRADE_TYPE.PAPER_TRADE)}
           size="small">
           Paper Trade
         </Button>
@@ -39,9 +39,9 @@ const TradeTypeBtn = ({add, setTrade, setTradeType}) => {
           style={{width: '48%'}}
           accessoryLeft={realTradeIcon}
           appearance={
-            add.tradeType === tradeType.REAL_TRADE ? 'filled' : 'outline'
+            tradeType === TRADE_TYPE.REAL_TRADE ? 'filled' : 'outline'
           }
-          onPress={() => setTradeType(tradeType.REAL_TRADE)}
+          onPress={() => setTradeType(TRADE_TYPE.REAL_TRADE)}
           size="small">
           Real Trade
         </Button>
@@ -50,16 +50,16 @@ const TradeTypeBtn = ({add, setTrade, setTradeType}) => {
         <Button
           style={{width: '48%'}}
           accessoryLeft={profitIcon}
-          appearance={add.trade === trade.PROFIT ? 'filled' : 'outline'}
-          onPress={() => setTrade(trade.PROFIT)}
+          appearance={trade === TRADE.PROFIT ? 'filled' : 'outline'}
+          onPress={() => setTrade(TRADE.PROFIT)}
           size="small">
           Profit
         </Button>
         <Button
           style={{width: '48%'}}
           accessoryLeft={lossIcon}
-          appearance={add.trade === trade.LOSS ? 'filled' : 'outline'}
-          onPress={() => setTrade(trade.LOSS)}
+          appearance={trade === TRADE.LOSS ? 'filled' : 'outline'}
+          onPress={() => setTrade(TRADE.LOSS)}
           size="small">
           Loss
         </Button>
@@ -70,7 +70,7 @@ const TradeTypeBtn = ({add, setTrade, setTradeType}) => {
 
 const mapStateToProps = state => {
   const {add} = state;
-  return {add};
+  return {trade: add.trade, tradeType: add.tradeType};
 };
 
 const mapDispatchToProps = dispatch =>

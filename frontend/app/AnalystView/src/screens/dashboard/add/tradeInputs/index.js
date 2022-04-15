@@ -7,19 +7,19 @@ import {bindActionCreators} from 'redux';
 // Import files
 import styles from './styles';
 import {COLORS} from '../../../../assets/theme';
-import {setPnl, setPnlPerc, setDesc} from '../../../../redux/actions/add';
+import {setTradeInputs} from '../../../../redux/actions/add';
 
-const TradeInputs = ({add, setDesc, setPnl, setPnlPerc}) => {
+const TradeInputs = ({pnl, pnlPerc, desc, setTradeInputs}) => {
   return (
-    <View>
+    <View style={styles.base}>
       <View style={styles.inputContainer}>
         <Text style={styles.txt}>PNL Amount</Text>
         <Input
-          style={{width: 200}}
+          style={{width: 200, borderRadius: 5}}
           placeholder="Amount"
           keyboardType="numeric"
-          value={add.pnl}
-          onChangeText={nextValue => setPnl(nextValue)}
+          value={pnl}
+          onChangeText={nextValue => setTradeInputs('pnl', nextValue)}
         />
         <TouchableOpacity style={{marginLeft: 10}}>
           <Icon
@@ -32,11 +32,11 @@ const TradeInputs = ({add, setDesc, setPnl, setPnlPerc}) => {
       <View style={styles.inputContainer}>
         <Text style={styles.txt}>PNL %</Text>
         <Input
-          style={{width: 200}}
+          style={{width: 200, borderRadius: 5}}
           placeholder="Percentage"
           keyboardType="numeric"
-          value={add.pnlPerc}
-          onChangeText={nextValue => setPnlPerc(nextValue)}
+          value={pnlPerc}
+          onChangeText={nextValue => setTradeInputs('pnlPerc', nextValue)}
         />
         <TouchableOpacity style={{marginLeft: 10}}>
           <Icon
@@ -49,11 +49,12 @@ const TradeInputs = ({add, setDesc, setPnl, setPnlPerc}) => {
       <View style={styles.inputContainer}>
         <Text style={styles.txt}>Description</Text>
         <Input
-          style={{width: 200}}
+          style={{width: 200, borderRadius: 5}}
+          textStyle={{height: 80}}
           placeholder="Optional"
           multiline={true}
-          value={add.description}
-          onChangeText={nextValue => setDesc(nextValue)}
+          value={desc}
+          onChangeText={nextValue => setTradeInputs('description', nextValue)}
         />
         <TouchableOpacity style={{marginLeft: 10}}>
           <Icon
@@ -69,15 +70,14 @@ const TradeInputs = ({add, setDesc, setPnl, setPnlPerc}) => {
 
 const mapStateToProps = state => {
   const {add} = state;
-  return {add};
+  const {pnl, pnlPerc, desc} = add;
+  return {pnl, desc, pnlPerc};
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      setPnl,
-      setDesc,
-      setPnlPerc,
+      setTradeInputs,
     },
     dispatch,
   );

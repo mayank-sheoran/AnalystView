@@ -8,6 +8,11 @@ export default StyleSheet.create({
     fontWeight: '700',
     color: COLORS.black,
   },
+  base: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

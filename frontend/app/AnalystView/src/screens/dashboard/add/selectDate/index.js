@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
 import {Button} from '@ui-kitten/components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -19,7 +18,7 @@ const SelectDate = ({add, setDate, showDatePicker}) => {
         size="medium"
         appearance="outline"
         onPress={() => showDatePicker(true)}>
-        {moment(add.date).format('DD-MM-YYYY')}
+        {moment(add.date).format('DD-MMM-YYYY')}
       </Button>
       <DatePicker
         modal

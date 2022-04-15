@@ -12,10 +12,24 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  userStrategy: {
+    flexDirection: 'row',
+    width: '100%',
+    marginTop: 10,
+    padding: 10,
+    borderColor: COLORS.light_grey,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
   userStrategies: {
     alignSelf: 'flex-start',
     flex: 1,
     width: '100%',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 10,
+    borderColor: COLORS.light_grey,
+    padding: 10,
   },
   buttonsContainer: {
     width: '100%',
@@ -23,5 +37,9 @@ export default StyleSheet.create({
   },
   addStrategyContainer: {
     flexDirection: 'column',
+  },
+  searchContainer: {
+    height: 40,
+    width: '100%',
   },
 });

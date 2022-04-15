@@ -1,41 +1,70 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import {CheckBox, Button, Input} from '@ui-kitten/components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import auth from '@react-native-firebase/auth';
 
 // Import Files
 import Loading from '../../../../components/loading';
 import styles from './styles';
-import {HEADER_THEME} from '../../../../components/Header/constants';
-import Header from '../../../../components/Header';
+import {HEADER_THEME} from '../../../../components/header/constants';
+import Header from '../../../../components/header';
 import {COLORS} from '../../../../assets/theme';
 import {setStrategiesUsed} from '../../../../redux/actions/add';
+import axios from 'axios';
+import SearchBar from '../../../../components/searchBar';
 
-const SelectStrategy = ({add, navigation, setStrategiesUsed}) => {
+const SelectStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
   const [loading, setLoading] = useState(false);
   const [allStrategies, setAllStrategies] = useState([]);
+  const [searchedStrategies, setSearchedStrategies] = useState([]);
   const [newStrategy, setNewStrategy] = useState('');
 
-  useEffect(() => {
+  const fetchUserStrategies = async () => {
     setLoading(true);
-    setAllStrategies(['OpenSpace', 'AscendingTriangle', 'DescendingTriangle']);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    try {
+      const response = await axios.post(
+        'http://192.168.29.84:3001/getAllStrategies',
+        {
+          userId: auth().currentUser.uid,
+        },
+      );
+      if (response.data.isError) {
+        Alert.alert('Error', response.data.errMessage);
+      } else {
+        setAllStrategies(response.data.data);
+        setSearchedStrategies(response.data.data);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong');
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchUserStrategies();
   }, []);
 
-  const getUserStrategiesCard = allStrategies.map(strategy => {
+  const getUserStrategiesCard = searchedStrategies.map(strategy => {
     return (
-      <View
-        key={strategy}
-        style={{flexDirection: 'column', width: '100%', marginTop: 10}}>
+      <View key={strategy}>
         <CheckBox
-          checked={add.strategiesUsed[strategy]}
+          style={styles.userStrategy}
+          checked={strategiesUsed[strategy]}
           onChange={nextChecked => {
             setStrategiesUsed({
-              ...add.strategiesUsed,
+              ...strategiesUsed,
               [strategy]: nextChecked,
             });
           }}>
@@ -45,14 +74,27 @@ const SelectStrategy = ({add, navigation, setStrategiesUsed}) => {
     );
   });
 
-  const handleAddNewStrategy = () => {
+  const handleAddNewStrategy = async () => {
     setLoading(true);
-    // save in db
-    setAllStrategies([...allStrategies, newStrategy]); // get this from db;
+    try {
+      const response = await axios.post(
+        'http://192.168.29.84:3001/addStrategy',
+        {
+          userId: auth().currentUser.uid,
+          strategy: newStrategy,
+        },
+      );
+      if (response.data.isError) {
+        Alert.alert('Error', response.data.errMessage);
+      } else {
+        setAllStrategies([...allStrategies, newStrategy]);
+        setSearchedStrategies([...allStrategies, newStrategy]);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong');
+    }
     setNewStrategy('');
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    setLoading(false);
   };
 
   return (
@@ -65,47 +107,49 @@ const SelectStrategy = ({add, navigation, setStrategiesUsed}) => {
         navigation={navigation}
         backScreen="addToJournal"
       />
-      <View style={styles.base}>
-        <Loading loading={loading}>
-          <View style={styles.userStrategies}>
-            <ScrollView>{getUserStrategiesCard}</ScrollView>
-          </View>
-          <View style={styles.buttonsContainer}>
-            <View style={styles.addStrategyContainer}>
-              <Input
-                placeholder="Enter Strategy Name"
-                value={newStrategy}
-                onChangeText={nextValue => setNewStrategy(nextValue)}
-              />
-              <Button
-                onPress={handleAddNewStrategy}
-                style={{
-                  width: '100%',
-                  marginTop: 5,
-                  backgroundColor: COLORS.black,
-                  borderColor: COLORS.black,
-                }}>
-                Add New Strategy
-              </Button>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-between',
-                marginTop: 10,
-              }}
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={-50}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.base}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Loading loading={loading}>
+            <SearchBar
+              defaultData={allStrategies}
+              saveData={setSearchedStrategies}
             />
-          </View>
-        </Loading>
-      </View>
+
+            <View style={styles.userStrategies}>
+              <ScrollView>{getUserStrategiesCard}</ScrollView>
+            </View>
+            <View style={styles.buttonsContainer}>
+              <View style={styles.addStrategyContainer}>
+                <Input
+                  placeholder="Enter Strategy Name"
+                  value={newStrategy}
+                  onChangeText={nextValue => setNewStrategy(nextValue)}
+                />
+                <Button
+                  onPress={handleAddNewStrategy}
+                  style={{
+                    width: '100%',
+                    marginTop: 5,
+                    backgroundColor: COLORS.black,
+                    borderColor: COLORS.black,
+                  }}>
+                  Add New Strategy
+                </Button>
+              </View>
+            </View>
+          </Loading>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </View>
   );
 };
 
 const mapStateToProps = state => {
   const {add} = state;
-  return {add};
+  return {strategiesUsed: add.strategiesUsed};
 };
 
 const mapDispatchToProps = dispatch =>

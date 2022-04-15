@@ -4,12 +4,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon} from '@ui-kitten/components';
 
 // Import files
-import Analyse from '../../../screens/dashboard/analyze';
-import Strategy from '../../../screens/dashboard/strategy';
 import Setting from '../../../screens/dashboard/setting';
 import {COLORS} from '../../../assets/theme';
 import styles from './styles';
 import AddNavStack from '../navStack/add';
+import AnalyseStack from '../navStack/analyse';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +20,7 @@ const BottomNavStack = () => {
       const iconName =
         route.name === 'add'
           ? 'plus-circle'
-          : route.name === 'analyze'
+          : route.name === 'analyse'
           ? 'options-2'
           : route.name === 'strategy'
           ? 'trending-up'
@@ -78,10 +77,10 @@ const BottomNavStack = () => {
         }}
       />
       <Tab.Screen
-        name="analyze"
-        component={Analyse}
+        name="analyse"
+        component={AnalyseStack}
         options={{
-          tabBarLabel: 'Analyze',
+          tabBarLabel: 'Analyse',
         }}
       />
       {/* <Tab.Screen

@@ -1,17 +1,14 @@
 import {
   SET_DATE,
   SET_DATE_PICKER_VISIBILITY,
-  SET_STRATEGY_SELECTOR_VISIBILITY,
   SET_STRATEGIES_USED,
   SET_TRADE_TYPE,
   SET_TRADE,
-  SET_PNL,
-  SET_PNL_PERC,
-  SET_DESCRIPTION,
   SET_BOOKMARK_STATUS,
   SET_LOADING_STATUS,
   SET_SNAPSHOT_UUID,
   RESET_STATE,
+  SET_TRADE_INPUTS,
 } from '../../constants/add';
 
 export const setDate = date => {
@@ -24,13 +21,6 @@ export const setDate = date => {
 export const showDatePicker = show => {
   return {
     type: SET_DATE_PICKER_VISIBILITY,
-    payload: show,
-  };
-};
-
-export const showStrategySelect = show => {
-  return {
-    type: SET_STRATEGY_SELECTOR_VISIBILITY,
     payload: show,
   };
 };
@@ -56,24 +46,13 @@ export const setTrade = trade => {
   };
 };
 
-export const setPnl = pnl => {
+export const setTradeInputs = (inputType, value) => {
   return {
-    type: SET_PNL,
-    payload: pnl,
-  };
-};
-
-export const setPnlPerc = pnlPerc => {
-  return {
-    type: SET_PNL_PERC,
-    payload: pnlPerc,
-  };
-};
-
-export const setDesc = desc => {
-  return {
-    type: SET_DESCRIPTION,
-    payload: desc,
+    type: SET_TRADE_INPUTS,
+    payload: {
+      inputType,
+      value,
+    },
   };
 };
 

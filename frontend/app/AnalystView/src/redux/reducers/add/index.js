@@ -1,23 +1,19 @@
 import {
   SET_DATE,
   SET_DATE_PICKER_VISIBILITY,
-  SET_STRATEGY_SELECTOR_VISIBILITY,
   SET_STRATEGIES_USED,
   SET_TRADE_TYPE,
   SET_TRADE,
-  SET_PNL,
-  SET_PNL_PERC,
-  SET_DESCRIPTION,
   SET_BOOKMARK_STATUS,
   SET_LOADING_STATUS,
   SET_SNAPSHOT_UUID,
+  SET_TRADE_INPUTS,
   RESET_STATE,
 } from '../../constants/add';
 
 const initialState = {
   date: new Date(),
   show: {
-    selectStrategy: false,
     infoPercCalc: false,
     infoSnapshot: false,
     datePicker: false,
@@ -29,8 +25,8 @@ const initialState = {
   strategiesUsed: {},
   tradeType: '',
   trade: '',
-  pnl: 0,
-  pnlPerc: 0,
+  pnl: null,
+  pnlPerc: null,
   snapshotUUID: null,
   description: '',
   bookmark: false,
@@ -48,11 +44,6 @@ export const addReducer = (state = initialState, action) => {
         ...state,
         show: {...state.show, datePicker: action.payload},
       };
-    case SET_STRATEGY_SELECTOR_VISIBILITY:
-      return {
-        ...state,
-        show: {...state.show, selectStrategy: action.payload},
-      };
     case SET_STRATEGIES_USED:
       return {
         ...state,
@@ -67,21 +58,6 @@ export const addReducer = (state = initialState, action) => {
       return {
         ...state,
         trade: action.payload,
-      };
-    case SET_PNL:
-      return {
-        ...state,
-        pnl: action.payload,
-      };
-    case SET_PNL_PERC:
-      return {
-        ...state,
-        pnlPerc: action.payload,
-      };
-    case SET_DESCRIPTION:
-      return {
-        ...state,
-        description: action.payload,
       };
     case SET_BOOKMARK_STATUS:
       return {
@@ -100,6 +76,11 @@ export const addReducer = (state = initialState, action) => {
       return {
         ...state,
         snapshotUUID: action.payload,
+      };
+    case SET_TRADE_INPUTS:
+      return {
+        ...state,
+        [action.payload.inputType]: action.payload.value,
       };
     case RESET_STATE:
       return initialState;
