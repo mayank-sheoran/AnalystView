@@ -1,15 +1,14 @@
 const { successResponse, errorResponse } = require('../../utils/response');
 const { filterTradesByStrategy } = require('../../utils/filter');
+const { getStrategyAnalysis } = require('../../utils/strategyAnalysis');
 const JournalDB = require('../../db/journal');
 const UserStrategiesDB = require('../../db/strategies');
 
 exports.saveToJournal = (req, res) => {
-  const { strategiesUsed } = req.body;
-  const strategiesArr = Object.keys(strategiesUsed);
-  const journalData = new JournalDB({ ...req.body, strategiesUsed: strategiesArr });
+  const journalData = new JournalDB(req.body);
   journalData.save().then(() => {
     successResponse(res, 'Added to Journal');
-  }).catch((err) => errorResponse(res, err));
+  }).catch(() => errorResponse(res, 'Failed to add in journal'));
 };
 
 exports.getAllTrades = async (req, res) => {
@@ -49,6 +48,11 @@ exports.getAllStrategies = (req, res) => {
   UserStrategiesDB.findOne({ userId }, (err, data) => {
     if (err) {
       errorResponse(res, 'Failed to fetch user strategies');
+      return;
+    }
+    if (!data) {
+      successResponse(res, []);
+      return;
     }
     successResponse(res, data.strategies);
   });
@@ -73,4 +77,15 @@ exports.addStrategy = (req, res) => {
       successResponse(res, 'New strategy Added');
     }).catch((error) => errorResponse(res, error));
   });
+};
+
+exports.getUserStrategyAnalysis = async (req, res) => {
+  const { userId, strategy } = req.body;
+  try {
+    const userTrades = await JournalDB.find({ userId });
+    const strategyAnalysis = getStrategyAnalysis(userTrades, strategy);
+    successResponse(res, strategyAnalysis);
+  } catch (error) {
+    errorResponse(res, error);
+  }
 };

@@ -8,5 +8,6 @@ router.post('/addStrategy', journalController.addStrategy);
 router.post('/getAllTrades', journalController.getAllTrades);
 router.post('/getAllFilteredTrades', journalController.getAllFilteredTrades);
 router.post('/getAllStrategies', journalController.getAllStrategies);
+router.post('/getUserStrategyAnalysis', journalController.getUserStrategyAnalysis);
 
 module.exports = router;

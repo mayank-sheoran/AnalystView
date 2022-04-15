@@ -1,11 +1,11 @@
-const tradeType = {
+const TRADE_TYPE = {
   PAPER_TRADE: 'paperTrade',
   REAL_TRADE: 'realTrade',
 };
 
-const trade = {
+const TRADE = {
   PROFIT: 'profit',
   LOSS: 'loss',
 };
 
-module.exports = { trade, tradeType };
+module.exports = { TRADE, TRADE_TYPE };

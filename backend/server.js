@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 // Import files
 const journalRoutes = require('./routes/journal');
+const userRoutes = require('./routes/user');
 
 require('dotenv').config();
 
@@ -15,6 +16,7 @@ app.use(cors());
 const http = require('http').createServer(app);
 
 // Routes
+app.use(userRoutes);
 app.use(journalRoutes);
 
 mongoose
