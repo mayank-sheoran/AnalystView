@@ -23,12 +23,12 @@ exports.getAllTrades = async (req, res) => {
 
 exports.getAllFilteredTrades = (req, res) => {
   const {
-    userId, date, strategiesUsed, tradeType, trade, pnlRange, pnlPercRange, bookmark,
+    userId, strategiesUsed, tradeType, trade, pnlRange, pnlPercRange, bookmark,
   } = req.body;
   const strategiesArr = Object.keys(strategiesUsed);
   JournalDB.find({
     userId,
-    date: date === 'any' ? { $ne: null } : date,
+    // date: date === 'any' ? { $ne: null } : date,
     tradeType: tradeType === 'both' ? { $ne: null } : tradeType,
     trade: trade === 'both' ? { $ne: null } : trade,
     pnlPerc: { $gt: pnlPercRange[0], $lt: pnlPercRange[1] },

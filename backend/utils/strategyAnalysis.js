@@ -1,4 +1,5 @@
 /* eslint-disable arrow-body-style */
+const _ = require('lodash');
 const { TRADE, TRADE_TYPE } = require('../enums/journal');
 
 const filterTradesByStrategy = (userTrades, strategy) => {
@@ -40,8 +41,8 @@ const getAnalysis = (userTrades) => {
     lossPerc: 100 - (100 * (wins / stratCount)),
     stratCount,
     avgProfitPerTrade: totalProfit / stratCount,
-    avgLossPerTrade: totalLoss / stratCount,
-    avgR2R: avgRiskPerc / avgRewardPerc,
+    avgLossPerTrade: _.round(totalLoss / stratCount, 2),
+    avgR2R: _.round(avgRiskPerc / avgRewardPerc, 2),
   };
 };
 
