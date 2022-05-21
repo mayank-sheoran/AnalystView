@@ -2,27 +2,25 @@ import {StyleSheet} from 'react-native';
 import {COLORS} from '../../../../../assets/theme';
 export default StyleSheet.create({
   base: {
-    flexDirection: 'column',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     flex: 1,
     backgroundColor: COLORS.white,
   },
-  detailContainerShort: {
+  detailContainer: {
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 100,
-    width: 100,
-    borderRadius: 10,
-    backgroundColor: COLORS.light_grey,
-  },
-  detailContainerLong: {
-    flexDirection: 'row',
     alignSelf: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+    padding: 5,
     alignItems: 'center',
-    height: 150,
-    width: '70%',
-    borderRadius: 15,
+    height: 90,
+    borderColor: COLORS.light_grey,
+    borderWidth: 1,
+    width: '40%',
+    marginHorizontal: 10,
+    borderRadius: 5,
+    marginVertical: 10,
     backgroundColor: COLORS.white,
   },
   shadow: {
@@ -33,7 +31,8 @@ export default StyleSheet.create({
     elevation: 5,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
+    color: COLORS.blue,
   },
 });

@@ -8,9 +8,7 @@ import StrategyAnalysis from '../../../../../screens/dashboard/analyze/strategy'
 const Stack = createNativeStackNavigator();
 const StrategyAnalysisStack = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="add"
-      screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="strategiesAnalysis" component={StrategyAnalysis} />
       <Stack.Screen
         name="detailedStrategyAnalysis"

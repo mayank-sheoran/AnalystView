@@ -3,6 +3,7 @@ import {View, Text, Alert, ScrollView, TouchableOpacity} from 'react-native';
 import axios from 'axios';
 import auth from '@react-native-firebase/auth';
 import {Icon} from '@ui-kitten/components';
+import {useIsFocused} from '@react-navigation/native';
 
 // Import Files
 import Header from '../../../../components/header';
@@ -56,12 +57,14 @@ const StrategyAnalysis = ({navigation}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white, paddingBottom: 10}}>
-      <Header
-        title="Strategy"
-        theme={HEADER_THEME.LIGHT}
-        color={COLORS.white}
-        backBtn={false}
-      />
+      {useIsFocused() && (
+        <Header
+          title="Strategy"
+          theme={HEADER_THEME.LIGHT}
+          color={COLORS.white}
+          backBtn={false}
+        />
+      )}
       <View style={{width: '90%', alignSelf: 'center'}}>
         <SearchBar defaultData={strategies} saveData={setSearchedStrategies} />
       </View>

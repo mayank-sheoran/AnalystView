@@ -2,8 +2,9 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import * as eva from '@eva-design/eva';
+import 'react-native-gesture-handler';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
 // File Imports

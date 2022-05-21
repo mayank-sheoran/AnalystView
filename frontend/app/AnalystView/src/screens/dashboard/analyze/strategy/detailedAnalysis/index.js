@@ -2,7 +2,9 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Alert, ScrollView} from 'react-native';
 import axios from 'axios';
+import {Card} from '@ui-kitten/components';
 import auth from '@react-native-firebase/auth';
+import {useIsFocused} from '@react-navigation/native';
 
 // Import Files
 import Header from '../../../../../components/header';
@@ -42,33 +44,26 @@ const DetailedStrategyAnalysis = ({navigation, route, login}) => {
       data.unitType === UNIT_TYPE.suffix
         ? `${details[detail]}${data.unit}`
         : `${login.currencySymbol}${details[detail]}`;
-    if (index % 2 === 1) {
-      return (
-        <View style={[styles.detailContainerLong, styles.shadow]} key={detail}>
-          <Text style={styles.headerText}>{heading}</Text>
-          <Text>{value}</Text>
-        </View>
-      );
-    }
     return (
-      <View style={[styles.detailContainerShort, styles.shadow]} key={detail}>
-        <Text>
-          {detail}: {details[detail]}
-        </Text>
+      <View style={[styles.detailContainer, styles.shadow]} key={detail}>
+        <Text style={styles.headerText}>{heading}</Text>
+        <Text>{value}</Text>
       </View>
     );
   });
 
   return (
     <View>
-      <Header
-        title={strategyName}
-        theme="dark"
-        color={COLORS.blue}
-        backBtn={true}
-        navigation={navigation}
-        backScreen="strategiesAnalysis"
-      />
+      {useIsFocused() && (
+        <Header
+          title={strategyName}
+          theme="dark"
+          color={COLORS.blue}
+          backBtn={true}
+          navigation={navigation}
+          backScreen="strategiesAnalysis"
+        />
+      )}
       <Loading loading={loading}>
         <ScrollView>
           <View style={styles.base}>{getDetailsCard}</View>

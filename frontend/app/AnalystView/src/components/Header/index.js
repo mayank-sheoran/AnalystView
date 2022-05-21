@@ -1,3 +1,4 @@
+// Module Imports
 import React from 'react';
 import {View, StatusBar, SafeAreaView} from 'react-native';
 import {
@@ -9,9 +10,11 @@ import {
 
 // Import files
 import styles from './styles';
+import {ICONS} from '../../assets/theme';
 
 const Header = ({title, theme, color, backBtn, navigation, backScreen}) => {
-  const BackIcon = props => <Icon {...props} name="arrow-back" />;
+  const BackIcon = props => <Icon {...props} name={ICONS.back_arrow} />;
+
   const BackAction = () => {
     const appearance = theme === 'dark' ? 'control' : 'default';
     if (!backBtn) {
@@ -25,6 +28,7 @@ const Header = ({title, theme, color, backBtn, navigation, backScreen}) => {
       />
     );
   };
+
   const GetStatusBar = ({backgroundColor}) => {
     const barStyle = theme === 'dark' ? 'light-content' : 'dark-content';
     return (

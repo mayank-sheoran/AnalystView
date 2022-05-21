@@ -4,8 +4,8 @@ import {Button, Icon, TabBar, Tab} from '@ui-kitten/components';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 // Import files
-import TradesAnalysis from '../../../../screens/dashboard/analyze/trades';
 import StrategyAnalysisStack from './strategyAnalysis';
+import TradesAnalysisStack from './tradeAnalysis';
 import {COLORS} from '../../../../assets/theme';
 
 const {Navigator, Screen} = createMaterialTopTabNavigator();
@@ -114,6 +114,9 @@ const AnalyseStack = () => {
   return (
     <Navigator
       tabBarPosition="bottom"
+      screenOptions={{
+        swipeEnabled: false,
+      }}
       tabBar={props => <TopTabBar {...props} />}>
       <Screen
         options={{tabBarLabel: 'Strategy Analysis'}}
@@ -123,7 +126,7 @@ const AnalyseStack = () => {
       <Screen
         options={{tabBarLabel: 'Trades Analysis'}}
         name="tradeAnalysis"
-        component={TradesAnalysis}
+        component={TradesAnalysisStack}
       />
     </Navigator>
   );

@@ -20,12 +20,12 @@ export const DETAILS_MAPPING = {
     unitType: UNIT_TYPE.prefix,
   },
   winPerc: {
-    heading: 'Win Percentage',
+    heading: 'Win %',
     unit: '%',
     unitType: UNIT_TYPE.suffix,
   },
   lossPerc: {
-    heading: 'Lose Percentage',
+    heading: 'Lose %',
     unit: '%',
     unitType: UNIT_TYPE.suffix,
   },
@@ -35,17 +35,17 @@ export const DETAILS_MAPPING = {
     unitType: UNIT_TYPE.prefix,
   },
   avgProfitPerTrade: {
-    heading: 'Average Profit Per Trade',
+    heading: 'Average Profit / Trade',
     unit: '',
     unitType: UNIT_TYPE.prefix,
   },
   avgLossPerTrade: {
-    heading: 'Average Loss Per Trade',
+    heading: 'Average Loss / Trade',
     unit: '',
     unitType: UNIT_TYPE.prefix,
   },
   avgR2R: {
-    heading: 'Average Risk To Reward Ratio',
+    heading: 'Average R2R Ratio',
     unit: '',
   },
 };

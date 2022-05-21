@@ -7,3 +7,7 @@ export const COLORS = {
   light_grey: '#DCDCDC',
   dark_grey: '#696969',
 };
+
+export const ICONS = {
+  back_arrow: 'arrow-back',
+};
