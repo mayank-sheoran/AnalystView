@@ -1,4 +1,5 @@
 const { successResponse, errorResponse } = require('../../utils/response');
+const { API_RESPONSE } = require('../../enums/response');
 const UserDB = require('../../db/user');
 
 exports.saveUser = (req, res) => {
@@ -8,9 +9,12 @@ exports.saveUser = (req, res) => {
       successResponse(res, user);
     } else {
       const userData = new UserDB({ userId, phone, currencySymbol });
-      userData.save().then(() => {
-        successResponse(res, 'New user added');
-      }).catch(() => errorResponse(res, 'Failed to add new user'));
+      userData
+        .save()
+        .then(() => {
+          successResponse(res, API_RESPONSE.NEW_USER_ADDED);
+        })
+        .catch(() => errorResponse(res, 'Failed to add new user'));
     }
   });
 };
