@@ -14,6 +14,8 @@ import {
 const initialState = {
   date: new Date(),
   show: {
+    infoDescription: false,
+    infoPNL: false,
     infoPercCalc: false,
     infoSnapshot: false,
     datePicker: false,

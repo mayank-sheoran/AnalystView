@@ -1,33 +1,35 @@
+// Module imports
 import React, {useState} from 'react';
 import {View, Text, Platform, Alert, TouchableOpacity} from 'react-native';
 import storage from '@react-native-firebase/storage';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Button, Icon} from '@ui-kitten/components';
 import uuid from 'react-native-uuid';
 
-// Import files
-import {setLoadings, setSnapshotUUID} from '../../../../redux/actions/add';
+// File imports
+import {setSnapshotUUID} from '../../../../redux/actions/add';
 import Loading from '../../../../components/loading';
 import {COLORS} from '../../../../assets/theme';
 import styles from './styles';
+import {handleSelectPhoto} from './utils';
 
-const ImageSelector = ({add, setLoadings, setSnapshotUUID}) => {
+const uploadIcon = props => {
+  return <Icon {...props} name="cloud-upload-outline" />;
+};
+
+const ImageSelector = ({snapshotUUID, setSnapshotUUID}) => {
+  const [loading, setLoading] = useState(false);
   const [transferred, setTransferred] = useState(0);
   const [uploadStatus, setUploadStatus] = useState('');
-
-  const uploadIcon = props => {
-    return <Icon {...props} name="cloud-upload-outline" />;
-  };
 
   const uploadImage = async response => {
     const {uri} = response.assets[0];
     const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-    setLoadings('upload', true);
+    setLoading(true);
     setTransferred(0);
-    const snapshotUUID = uuid.v4();
-    const task = storage().ref(snapshotUUID).putFile(uploadUri);
+    const newSnapshotUUID = uuid.v4();
+    const task = storage().ref(newSnapshotUUID).putFile(uploadUri);
     task.on('state_changed', snapshot => {
       setTransferred(
         Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100,
@@ -47,51 +49,15 @@ const ImageSelector = ({add, setLoadings, setSnapshotUUID}) => {
       console.error(e);
       Alert.alert('Error', 'Upload Failed!');
     }
-    setSnapshotUUID(snapshotUUID);
+    setSnapshotUUID(newSnapshotUUID);
     setTransferred(0);
-    setLoadings('upload', false);
+    setLoading(false);
     Alert.alert('Success', 'Photo uploaded!');
-  };
-
-  const handleSelectPhoto = async () => {
-    Alert.alert('Choose Option', 'Upload image from ?', [
-      {
-        text: 'Camera',
-        onPress: async () => {
-          await launchCamera(options, response => {
-            if (response) {
-              uploadImage(response);
-            }
-          });
-        },
-        style: 'destructive',
-      },
-      {
-        text: 'Library',
-        onPress: async () => {
-          await launchImageLibrary(options, response => {
-            if (response) {
-              uploadImage(response);
-            }
-          });
-        },
-        style: 'destructive',
-      },
-      {
-        text: 'Cancel',
-        style: 'destructive',
-      },
-    ]);
-    const options = {
-      mediaType: 'photo',
-      quality: 0.05,
-      cameraType: 'back',
-    };
   };
 
   return (
     <View style={styles.base}>
-      {add.loadings.upload && (
+      {loading && (
         <View style={{flexDirection: 'row'}}>
           <Text style={{fontWeight: 'bold', marginRight: 20}}>
             {uploadStatus}
@@ -99,13 +65,13 @@ const ImageSelector = ({add, setLoadings, setSnapshotUUID}) => {
           <Text>{`${transferred}%`}</Text>
         </View>
       )}
-      <Loading loading={add.loadings.upload}>
+      <Loading loading={loading}>
         <Button
           style={{width: '90%'}}
           accessoryLeft={uploadIcon}
           size="small"
-          status={add.snapshotUUID ? 'primary' : 'danger'}
-          onPress={handleSelectPhoto}>
+          status={snapshotUUID ? 'primary' : 'danger'}
+          onPress={() => handleSelectPhoto(uploadImage)}>
           Upload
         </Button>
       </Loading>
@@ -122,13 +88,13 @@ const ImageSelector = ({add, setLoadings, setSnapshotUUID}) => {
 
 const mapStateToProps = state => {
   const {add} = state;
-  return {add};
+  const {snapshotUUID} = add;
+  return {snapshotUUID};
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      setLoadings,
       setSnapshotUUID,
     },
     dispatch,

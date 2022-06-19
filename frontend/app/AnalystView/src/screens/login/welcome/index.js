@@ -1,3 +1,4 @@
+// Modules imports
 import React from 'react';
 import {
   View,
@@ -7,11 +8,13 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
-import styles from './styles';
 
-// Import files
+// File imports
 import Feature from './feature';
 import LoginInputs from './loginInput';
+import styles from './styles';
+import {COLORS} from '../../../assets/theme';
+import {DIRECTION, FEATURES} from './constants';
 
 const Welcome = ({navigation}) => {
   return (
@@ -25,17 +28,25 @@ const Welcome = ({navigation}) => {
             source={require('../../../assets/logos/black_with_text.png')}
           />
           <View style={styles.featuresContainer}>
-            <Feature value="Analyse Your Trades" dir="left" color="red" />
-            <Feature value="Trading Journal" dir="right" color="green" />
             <Feature
-              value="Learn from your past trades"
-              dir="left"
-              color="red"
+              value={FEATURES.FEATURE1}
+              dir={DIRECTION.LEFT}
+              color={COLORS.red}
             />
             <Feature
-              value="Find your trading style"
-              dir="right"
-              color="green"
+              value={FEATURES.FEATURE2}
+              dir={DIRECTION.RIGHT}
+              color={COLORS.green}
+            />
+            <Feature
+              value={FEATURES.FEATURE3}
+              dir={DIRECTION.LEFT}
+              color={COLORS.red}
+            />
+            <Feature
+              value={FEATURES.FEATURE4}
+              dir={DIRECTION.RIGHT}
+              color={COLORS.green}
             />
           </View>
           <View style={styles.loginContainer}>

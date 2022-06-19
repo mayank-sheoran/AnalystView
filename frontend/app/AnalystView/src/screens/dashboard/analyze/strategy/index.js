@@ -1,9 +1,9 @@
+// Module imports
 import React, {useState, useEffect} from 'react';
-import {View, Text, Alert, ScrollView, TouchableOpacity} from 'react-native';
-import axios from 'axios';
-import auth from '@react-native-firebase/auth';
+import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import {Icon} from '@ui-kitten/components';
 import {useIsFocused} from '@react-navigation/native';
+import {connect} from 'react-redux';
 
 // Import Files
 import Header from '../../../../components/header';
@@ -11,32 +11,25 @@ import {COLORS} from '../../../../assets/theme';
 import styles from './styles';
 import {HEADER_THEME} from '../../../../components/header/constants';
 import SearchBar from '../../../../components/searchBar';
+import {fetchUserStrategies} from './utils';
+import {SCREEN_NAMES} from '../../../../navigation/constants';
 
-const StrategyAnalysis = ({navigation}) => {
+const StrategyAnalysis = ({navigation, login}) => {
   const [strategies, setStrategies] = useState([]);
   const [searchedStrategies, setSearchedStrategies] = useState([]);
 
-  const fetchUserStrategies = async () => {
-    const response = await axios.post(
-      'http://192.168.29.84:3001/getAllStrategies',
-      {userId: auth().currentUser.uid},
-    );
-    if (response.data.isError) {
-      Alert.alert('Error', response.data.errMessage);
-    } else {
-      setStrategies(response.data.data);
-      setSearchedStrategies(response.data.data);
-    }
-  };
   useEffect(() => {
-    fetchUserStrategies();
-  }, []);
+    navigation.addListener('focus', () => {
+      fetchUserStrategies({setSearchedStrategies, setStrategies, login});
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
 
   const getStrategiesCard = searchedStrategies.map(strategy => {
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('detailedStrategyAnalysis', {
+          navigation.navigate(SCREEN_NAMES.DETAILED_STRATEGY_ANALYSIS_SCREEN, {
             strategyName: strategy,
           })
         }
@@ -75,4 +68,9 @@ const StrategyAnalysis = ({navigation}) => {
   );
 };
 
-export default StrategyAnalysis;
+const mapStateToProps = state => {
+  const {login} = state;
+  return {login};
+};
+
+export default connect(mapStateToProps, null)(StrategyAnalysis);

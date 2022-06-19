@@ -1,6 +1,7 @@
+// Import modules
 import React, {useState} from 'react';
-import {View, Text, Alert, ScrollView} from 'react-native';
-import {Icon, Input} from '@ui-kitten/components';
+import {View} from 'react-native';
+import {Input} from '@ui-kitten/components';
 
 // Import files
 import styles from './styles';
@@ -16,6 +17,7 @@ const SearchBar = ({defaultData, saveData}) => {
     });
     saveData(filteredData);
   };
+
   return (
     <View style={styles.searchContainer}>
       <Input

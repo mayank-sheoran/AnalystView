@@ -1,6 +1,6 @@
+// Import Modules
 import React from 'react';
-import {View, Text} from 'react-native';
-import {Button} from '@ui-kitten/components';
+import {View} from 'react-native';
 
 // Import Files
 import styles from './styles';

@@ -12,6 +12,8 @@ target 'AnalystView' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-photo-view-ex', :path => '../node_modules/react-native-photo-view-ex'
+
   target 'AnalystViewTests' do
     inherit! :complete
     # Pods for testing

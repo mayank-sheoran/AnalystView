@@ -1,17 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, ActivityIndicator, TextInput} from 'react-native';
-import auth from '@react-native-firebase/auth';
+import React, {useState} from 'react';
+import {View, Text} from 'react-native';
 import {connect} from 'react-redux';
 import {Input, Button} from '@ui-kitten/components';
 import CountryPicker from 'react-native-country-picker-modal';
-import getSymbolFromCurrency from 'currency-symbol-map';
 
 // File imports
 import styles from './styles';
 import Loading from '../../../../components/loading';
-import notify from '../../../../components/notify';
 import {saveUser} from '../../../../redux/actions/login';
-import countryToSymbolMapping from '../../../../assets/json/countryToSymbolMapping.json';
+import {signInWithPhoneNumber} from '../utils';
 
 const LoginInputs = ({navigation, saveUser, login}) => {
   const [confirm, setConfirm] = useState(null);
@@ -22,42 +19,19 @@ const LoginInputs = ({navigation, saveUser, login}) => {
     phoneNum: '',
   });
 
-  async function signInWithPhoneNumber(phoneNumber) {
-    try {
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-      if (true) {
-        await saveUser({
-          phone: state.phoneNum,
-          currencySymbol: getSymbolFromCurrency(
-            countryToSymbolMapping[state.countryCode][0].Code,
-          ),
-        });
-        setConfirm(confirmation);
-        setLoading(false);
-        navigation.navigate('otpVerify', {
-          confirm,
-          phoneNumber,
-          callingCode: state.callingCode,
-        });
-      }
-    } catch (err) {
-      setLoading(false);
-      if (err.code === 'auth/missing-phone-number') {
-        notify({heading: 'Error', subHeading: 'Enter Phone Number'});
-      } else if (err.code === 'auth/invalid-phone-number') {
-        notify({heading: 'Error', subHeading: 'Invalid Phone Number'});
-      } else if (err.code === 'auth/quota-exceeded') {
-        notify({heading: 'Error', subHeading: 'SMS Quota Exceeded'});
-      } else if (err.code === 'auth/user-disabled') {
-        notify({heading: 'Error', subHeading: 'BANNED'});
-      } else {
-        console.log('Unexpected Error.' + err.code);
-      }
-    }
-  }
   const handleGetOtp = () => {
     setLoading(true);
-    signInWithPhoneNumber(`+${state.callingCode}${state.phoneNum}`);
+    const params = {
+      phoneNumber: `+${state.callingCode}${state.phoneNum}`,
+      state,
+      setLoading,
+      setConfirm,
+      confirm,
+      navigation,
+      saveUser,
+      login,
+    };
+    signInWithPhoneNumber(params);
   };
 
   const loginInputCard = () => {
@@ -114,12 +88,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  // return bindActionCreators(
-  //   {
-  //     saveUser,
-  //   },
-  //   dispatch,
-  // );
   return {
     saveUser: async user => await dispatch(saveUser(user)),
   };

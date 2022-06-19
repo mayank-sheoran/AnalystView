@@ -1,11 +1,16 @@
+// Module imports
 import React from 'react';
 import {View, Text} from 'react-native';
+
+// File imports
 import styles from './styles';
+import {COLORS} from '../../../../assets/theme';
+import {DIRECTION} from '../constants';
 
 const Feature = props => {
-  const bgColor = props.color === 'red' ? '#EC2B01' : '#06EC01';
-  const txtColor = props.color === 'red' ? 'white' : 'black';
-  const position = props.dir === 'left' ? true : false;
+  const bgColor = props.color;
+  const txtColor = props.color === COLORS.red ? COLORS.white : COLORS.black;
+  const position = props.dir === DIRECTION.LEFT ? true : false;
   return (
     <View style={styles.featureContainer}>
       <View

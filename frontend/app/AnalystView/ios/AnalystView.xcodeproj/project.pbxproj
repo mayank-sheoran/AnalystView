@@ -15,6 +15,7 @@
 		45135AAA28029FBD0086E25B /* heheBoi.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 45135AA728029FBD0086E25B /* heheBoi.mp3 */; };
 		45135AAB28029FBD0086E25B /* ahh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 45135AA828029FBD0086E25B /* ahh.mp3 */; };
 		45135AAC28029FBD0086E25B /* moment.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 45135AA928029FBD0086E25B /* moment.mp3 */; };
+		4533DAE9283A22AB00369A7D /* success.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4533DAE8283A22AA00369A7D /* success.mp3 */; };
 		456CD9CB28155661003C9A4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 456CD9CA28155661003C9A4B /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B7EB2FD0BC4A18681D7AB611 /* libPods-AnalystView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A696A8024BFFBC98B47E6B /* libPods-AnalystView.a */; };
@@ -44,6 +45,7 @@
 		45135AA728029FBD0086E25B /* heheBoi.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = heheBoi.mp3; sourceTree = "<group>"; };
 		45135AA828029FBD0086E25B /* ahh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ahh.mp3; sourceTree = "<group>"; };
 		45135AA928029FBD0086E25B /* moment.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = moment.mp3; sourceTree = "<group>"; };
+		4533DAE8283A22AA00369A7D /* success.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = success.mp3; sourceTree = "<group>"; };
 		456CD9CA28155661003C9A4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6E28F5F6229C652A032C0B14 /* Pods-AnalystView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalystView.debug.xcconfig"; path = "Target Support Files/Pods-AnalystView/Pods-AnalystView.debug.xcconfig"; sourceTree = "<group>"; };
 		728D86FD5607F4A935C9EBCF /* libPods-AnalystView-AnalystViewTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AnalystView-AnalystViewTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,6 +138,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4533DAE8283A22AA00369A7D /* success.mp3 */,
 				45135AA828029FBD0086E25B /* ahh.mp3 */,
 				45135AA728029FBD0086E25B /* heheBoi.mp3 */,
 				45135AA928029FBD0086E25B /* moment.mp3 */,
@@ -259,6 +262,7 @@
 				45135AAB28029FBD0086E25B /* ahh.mp3 in Resources */,
 				45135AAC28029FBD0086E25B /* moment.mp3 in Resources */,
 				45135AAA28029FBD0086E25B /* heheBoi.mp3 in Resources */,
+				4533DAE9283A22AB00369A7D /* success.mp3 in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				456CD9CB28155661003C9A4B /* GoogleService-Info.plist in Resources */,
 			);

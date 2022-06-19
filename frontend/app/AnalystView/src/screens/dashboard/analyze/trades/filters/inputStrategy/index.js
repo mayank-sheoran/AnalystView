@@ -4,55 +4,42 @@ import {
   View,
   Text,
   ScrollView,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import {CheckBox, Button, Input} from '@ui-kitten/components';
+import {CheckBox} from '@ui-kitten/components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import auth from '@react-native-firebase/auth';
-import axios from 'axios';
 
 // Import Files
 import Loading from '../../../../../../components/loading';
 import styles from './styles';
-import {HEADER_THEME} from '../../../../../../components/header/constants';
 import Header from '../../../../../../components/header';
 import {COLORS} from '../../../../../../assets/theme';
 import {setStrategiesUsed} from '../../../../../../redux/actions/analysis';
 import SearchBar from '../../../../../../components/searchBar';
+import {fetchUserStrategies} from '../../utils';
+import {INPUT_STRATEGY_HEADER_DETAILS} from '../../constants';
 
-const InputStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
+const InputStrategy = ({
+  strategiesUsed,
+  navigation,
+  setStrategiesUsed,
+  login,
+}) => {
   const [loading, setLoading] = useState(false);
   const [allStrategies, setAllStrategies] = useState([]);
   const [searchedStrategies, setSearchedStrategies] = useState([]);
 
-  const fetchUserStrategies = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        'http://192.168.29.84:3001/getAllStrategies',
-        {
-          userId: auth().currentUser.uid,
-        },
-      );
-      if (response.data.isError) {
-        Alert.alert('Error', response.data.errMessage);
-      } else {
-        setAllStrategies(response.data.data);
-        setSearchedStrategies(response.data.data);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Something went wrong');
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    fetchUserStrategies();
+    fetchUserStrategies({
+      setLoading,
+      setAllStrategies,
+      setSearchedStrategies,
+      login,
+    });
   }, []);
 
   const getUserStrategiesCard = searchedStrategies.map(strategy => {
@@ -76,12 +63,12 @@ const InputStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
       <Header
-        title="Your Strategies"
-        theme={HEADER_THEME.LIGHT}
+        title={INPUT_STRATEGY_HEADER_DETAILS.TITLE}
+        theme={INPUT_STRATEGY_HEADER_DETAILS.THEME}
         color={COLORS.white}
         backBtn={true}
         navigation={navigation}
-        backScreen="tradeFilters"
+        backScreen={INPUT_STRATEGY_HEADER_DETAILS.BACKSCREEN}
       />
       <KeyboardAvoidingView
         keyboardVerticalOffset={-50}
@@ -105,9 +92,9 @@ const InputStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
 };
 
 const mapStateToProps = state => {
-  const {analysis} = state;
+  const {analysis, login} = state;
   const {strategiesUsed} = analysis;
-  return {strategiesUsed};
+  return {strategiesUsed, login};
 };
 
 const mapDispatchToProps = dispatch => {

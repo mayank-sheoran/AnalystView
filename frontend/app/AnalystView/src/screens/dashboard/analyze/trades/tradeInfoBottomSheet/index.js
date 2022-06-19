@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {Text, View, Button} from 'react-native';
+import {Text, View} from 'react-native';
 import React, {useCallback, useMemo} from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import moment from 'moment';
@@ -8,17 +8,14 @@ import moment from 'moment';
 import styles from './styles';
 
 const TradeInfoBottomSheet = ({bottomSheetRef, selectedTrade}) => {
-  // variables
   const snapPoints = useMemo(() => ['10%', '30%', '70%'], []);
 
   const handleSheetChanges = useCallback(index => {
     if (index === 0) {
       bottomSheetRef.current.close();
     }
-    console.log('handleSheetChanges', index);
   }, []);
 
-  // renders
   return (
     <BottomSheet
       ref={bottomSheetRef}

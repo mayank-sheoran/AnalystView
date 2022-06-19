@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {View, Text, Alert, ScrollView} from 'react-native';
-import axios from 'axios';
-import {Card} from '@ui-kitten/components';
-import auth from '@react-native-firebase/auth';
+import {View, Text, ScrollView} from 'react-native';
+import {connect} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 
 // Import Files
@@ -12,29 +10,18 @@ import {COLORS} from '../../../../../assets/theme';
 import styles from './styles';
 import Loading from '../../../../../components/loading';
 import {DETAILS_MAPPING, UNIT_TYPE} from './contants';
-import {connect} from 'react-redux';
+import {fetchStrategyDetails} from '../utils';
+import {SCREEN_NAMES} from '../../../../../navigation/constants';
 
 const DetailedStrategyAnalysis = ({navigation, route, login}) => {
   const {strategyName} = route.params;
   const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const fetchStrategyDetails = async () => {
-    const response = await axios.post(
-      'http://192.168.29.84:3001/getUserStrategyAnalysis',
-      {userId: auth().currentUser.uid, strategy: strategyName},
-    );
-    if (response.data.isError) {
-      setLoading(false);
-      Alert.alert('Error', response.data.errMessage);
-    } else {
-      console.log(response.data.data.realTrades);
-      setDetails(response.data.data.realTrades);
-      setLoading(false);
-    }
-  };
   useEffect(() => {
-    fetchStrategyDetails();
+    navigation.addListener('focus', () => {
+      fetchStrategyDetails({strategyName, setLoading, setDetails});
+    });
   }, []);
 
   const getDetailsCard = Object.keys(details).map((detail, index) => {
@@ -61,7 +48,7 @@ const DetailedStrategyAnalysis = ({navigation, route, login}) => {
           color={COLORS.blue}
           backBtn={true}
           navigation={navigation}
-          backScreen="strategiesAnalysis"
+          backScreen={SCREEN_NAMES.STRATEGY_ANALYSIS_SCREEN}
         />
       )}
       <Loading loading={loading}>

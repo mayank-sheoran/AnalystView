@@ -30,10 +30,10 @@ const TradeInputs = ({pnl, pnlPerc, desc, setTradeInputs}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.txt}>PNL %</Text>
+        <Text style={styles.txt}>Capital Used</Text>
         <Input
           style={{width: 200, borderRadius: 5}}
-          placeholder="Percentage"
+          placeholder="Amount"
           keyboardType="numeric"
           value={pnlPerc}
           onChangeText={nextValue => setTradeInputs('pnlPerc', nextValue)}

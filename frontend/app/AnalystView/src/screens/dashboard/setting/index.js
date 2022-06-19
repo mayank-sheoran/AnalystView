@@ -1,5 +1,6 @@
+// Module imports
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {Button} from '@ui-kitten/components';
 

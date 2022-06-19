@@ -1,100 +1,22 @@
+// Module imports
 import React from 'react';
-import {View} from 'react-native';
-import {Button, Icon, TabBar, Tab} from '@ui-kitten/components';
+import {Icon, TabBar, Tab} from '@ui-kitten/components';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-// Import files
+// File imports
 import StrategyAnalysisStack from './strategyAnalysis';
 import TradesAnalysisStack from './tradeAnalysis';
-import {COLORS} from '../../../../assets/theme';
+import {ICONS} from '../../../../assets/theme';
+import {SCREEN_NAMES, ANALYSE_SCREEN_TAB_HEADINGS} from '../../../constants';
+import CustomTabBar from './customTabBar';
 
 const {Navigator, Screen} = createMaterialTopTabNavigator();
 
 const strategyIcon = props => {
-  return <Icon {...props} name="bar-chart-outline" />;
+  return <Icon {...props} name={ICONS.bar_chart_outline} />;
 };
 const TradesIcon = props => {
-  return <Icon {...props} name="activity-outline" />;
-};
-
-const CustomTabBar = ({state, descriptors, navigation, position}) => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        backgroundColor: COLORS.white,
-        borderRadius: 5,
-        height: 'auto',
-        width: '100%',
-        alignSelf: 'center',
-        justifyContent: 'space-around',
-      }}>
-      {state.routes.map((route, index) => {
-        const {options} = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
-
-        const isFocused = state.index === index;
-
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            // The `merge: true` option makes sure that the params inside the tab screen are preserved
-            navigation.navigate({name: route.name, merge: true});
-          }
-        };
-
-        const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-        };
-
-        const icon =
-          route.name === 'strategyAnalysis' ? strategyIcon : TradesIcon;
-
-        return (
-          <Button
-            onPress={onPress}
-            style={{width: 150}}
-            size="small"
-            onLongPress={onLongPress}
-            accessoryLeft={icon}
-            appearance={isFocused ? 'filled' : 'outline'}>
-            {label}
-          </Button>
-          //   <TouchableOpacity
-          //     accessibilityRole="button"
-          //     accessibilityState={isFocused ? {selected: true} : {}}
-          //     accessibilityLabel={options.tabBarAccessibilityLabel}
-          //     testID={options.tabBarTestID}
-          //     onPress={onPress}
-          //     onLongPress={onLongPress}
-          //     style={{
-          //       flex: 1,
-          //       alignItems: 'center',
-          //       justifyContent: 'center',
-          //       borderRadius: 5,
-          //       marginHorizontal: 10,
-          //       co
-          //       backgroundColor: isFocused ? COLORS.blue : COLORS.light_grey,
-          //     }}>
-          //     <Text>{label}</Text>
-          //   </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
+  return <Icon {...props} name={ICONS.activity_outline} />;
 };
 
 const TopTabBar = ({navigation, state}) => (
@@ -102,11 +24,15 @@ const TopTabBar = ({navigation, state}) => (
     selectedIndex={state.index}
     onSelect={index => navigation.navigate(state.routeNames[index])}>
     <Tab
-      title="Strategy Analysis"
+      title={ANALYSE_SCREEN_TAB_HEADINGS.STRATEGY_ANALYSIS}
       icon={strategyIcon}
       style={{marginTop: 10}}
     />
-    <Tab title="Trades Analysis" icon={TradesIcon} style={{marginTop: 10}} />
+    <Tab
+      title={ANALYSE_SCREEN_TAB_HEADINGS.TRADE_ANALYSIS}
+      icon={TradesIcon}
+      style={{marginTop: 10}}
+    />
   </TabBar>
 );
 
@@ -119,13 +45,13 @@ const AnalyseStack = () => {
       }}
       tabBar={props => <TopTabBar {...props} />}>
       <Screen
-        options={{tabBarLabel: 'Strategy Analysis'}}
-        name="strategyAnalysis"
+        options={{tabBarLabel: ANALYSE_SCREEN_TAB_HEADINGS.STRATEGY_ANALYSIS}}
+        name={SCREEN_NAMES.STRATEGY_ANALYSIS_SCREEN}
         component={StrategyAnalysisStack}
       />
       <Screen
-        options={{tabBarLabel: 'Trades Analysis'}}
-        name="tradeAnalysis"
+        options={{tabBarLabel: ANALYSE_SCREEN_TAB_HEADINGS.TRADE_ANALYSIS}}
+        name={SCREEN_NAMES.TRADE_ANALYSIS_SCREEN}
         component={TradesAnalysisStack}
       />
     </Navigator>

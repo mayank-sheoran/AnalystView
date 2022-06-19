@@ -1,31 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Alert,
-  Image,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {View, ScrollView, Text} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import {Button, Icon} from '@ui-kitten/components';
-import auth from '@react-native-firebase/auth';
-import storage from '@react-native-firebase/storage';
-import axios from 'axios';
+import {Button} from '@ui-kitten/components';
+import {connect} from 'react-redux';
+import _ from 'lodash';
 
 // Import Files
 import Header from '../../../../components/header';
 import {COLORS} from '../../../../assets/theme';
-import {HEADER_THEME} from '../../../../components/header/constants';
 import styles from './styles';
 import FullScreenImage from './fullScreenImage';
-import {connect} from 'react-redux';
 import Loading from '../../../../components/loading';
 import TradeInfoBottomSheet from './tradeInfoBottomSheet';
+import {fetchUserTrades} from './utils';
+import {SCREEN_NAMES} from '../../../../navigation/constants';
+import TradeCard from './tradeCard';
+import {HEADER_DETAILS} from './constants';
 
-const TradesAnalysis = ({navigation, appliedFilters, refetchTrades}) => {
+const TradesAnalysis = ({navigation, appliedFilters, refetchTrades, login}) => {
   const [trades, setTrades] = useState([]);
   const [imageUrls, setImageUrls] = useState({});
   const [loading, setLoading] = useState(false);
@@ -33,53 +26,16 @@ const TradesAnalysis = ({navigation, appliedFilters, refetchTrades}) => {
   const [fullScreenImage, setFullScreenImage] = useState(null);
   const bottomSheetRef = useRef();
 
-  const saveTradesImageUrls = async userTrades => {
-    await Promise.all(
-      userTrades.map(async trade => {
-        const snapshotUUID = trade.tradeId;
-        if (!snapshotUUID) {
-          return;
-        }
-        const firebaseStorage = storage();
-        const reference = firebaseStorage.ref(`/${snapshotUUID}`);
-        const downloadUrl = await reference.getDownloadURL();
-        console.log(snapshotUUID, downloadUrl);
-        setImageUrls(prevState => ({
-          ...prevState,
-          [snapshotUUID]: downloadUrl,
-        }));
-      }),
-    );
-  };
-
-  const fetchUserTrades = async () => {
-    console.log('WORKING');
-    setLoading(true);
-    const response = await axios.post(
-      'http://192.168.29.84:3001/getAllFilteredTrades',
-      {
-        userId: auth().currentUser.uid,
-        strategiesUsed: appliedFilters.strategiesUsed,
-        tradeType: appliedFilters.trade,
-        trade: appliedFilters.pnl,
-        pnlRange: appliedFilters.pnlRange,
-        pnlPercRange: appliedFilters.pnlPercRange,
-        bookmark: appliedFilters.bookmark,
-      },
-    );
-    if (response.data.isError) {
-      Alert.alert('Error', response.data.errMessage);
-    } else {
-      console.log(response.data.data);
-      await saveTradesImageUrls(response.data.data);
-      console.log('😞', imageUrls);
-      setTrades(response.data.data);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    fetchUserTrades();
+    navigation.addListener('focus', () => {
+      fetchUserTrades({
+        setLoading,
+        setImageUrls,
+        appliedFilters,
+        setTrades,
+        login,
+      });
+    });
   }, [refetchTrades]);
 
   const getTradeCards = trades.map(trade => {
@@ -88,43 +44,34 @@ const TradesAnalysis = ({navigation, appliedFilters, refetchTrades}) => {
       return;
     }
     return (
-      <View style={styles.tradeCard} key={snapshotUUID}>
-        <TouchableWithoutFeedback
-          onPress={() => setFullScreenImage(imageUrls[snapshotUUID])}>
-          <Image
-            source={{
-              uri: imageUrls[snapshotUUID],
-            }}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-
-        <TouchableOpacity
-          style={styles.expandButton}
-          onPress={() => {
-            setSelectedTrade(trade);
-            console.log(trade);
-            bottomSheetRef.current.expand();
-          }}>
-          <Icon
-            style={{
-              width: 30,
-              height: 30,
-            }}
-            fill={COLORS.blue}
-            name="expand-outline"
-          />
-        </TouchableOpacity>
-      </View>
+      <TradeCard
+        imageUrls={imageUrls}
+        snapshotUUID={snapshotUUID}
+        setFullScreenImage={setFullScreenImage}
+        setSelectedTrade={setSelectedTrade}
+        bottomSheetRef={bottomSheetRef}
+        trade={trade}
+      />
     );
   });
+
+  const NoTradeCard = () => {
+    if (_.isEmpty(trades)) {
+      return (
+        <View style={{width: '100%', alignItems: 'center', marginTop: 10}}>
+          <Text>No trades available!</Text>
+        </View>
+      );
+    }
+    return null;
+  };
 
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
       {useIsFocused() && (
         <Header
-          title="Trades"
-          theme={HEADER_THEME.LIGHT}
+          title={HEADER_DETAILS.TITLE}
+          theme={HEADER_DETAILS.THEME}
           color={COLORS.white}
           backBtn={false}
         />
@@ -141,13 +88,18 @@ const TradesAnalysis = ({navigation, appliedFilters, refetchTrades}) => {
             style={styles.filterBtn}
             size="medium"
             appearance="outline"
-            onPress={() => navigation.navigate('tradeFilters')}>
+            onPress={() =>
+              navigation.navigate(SCREEN_NAMES.TRADE_FILTER_SCREEN)
+            }>
             Add Filters
           </Button>
         </View>
         <Loading loading={loading}>
           <View style={styles.tradesContainer}>
-            <ScrollView>{getTradeCards}</ScrollView>
+            <ScrollView>
+              {getTradeCards}
+              <NoTradeCard />
+            </ScrollView>
           </View>
         </Loading>
       </View>
@@ -160,9 +112,9 @@ const TradesAnalysis = ({navigation, appliedFilters, refetchTrades}) => {
 };
 
 const mapStateToProps = state => {
-  const {analysis} = state;
+  const {analysis, login} = state;
   const {appliedFilters, refetchTrades} = analysis;
-  return {appliedFilters, refetchTrades};
+  return {appliedFilters, refetchTrades, login};
 };
 
 export default connect(mapStateToProps, null)(TradesAnalysis);

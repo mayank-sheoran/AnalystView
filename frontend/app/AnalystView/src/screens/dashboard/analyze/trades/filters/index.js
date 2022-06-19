@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+// Module imports
 import {Button, CheckBox} from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {connect} from 'react-redux';
 
-// Import files
+// File imports
 import Header from '../../../../../components/header';
 import {HEADER_THEME} from '../../../../../components/header/constants';
 import {COLORS} from '../../../../../assets/theme';
@@ -20,6 +21,8 @@ import {
   savePrevFilters,
 } from '../../../../../redux/actions/analysis';
 import {bindActionCreators} from 'redux';
+import {SCREEN_NAMES} from '../../../../../navigation/constants';
+import {getStrategyText} from '../utils';
 
 const Filters = ({
   navigation,
@@ -33,31 +36,6 @@ const Filters = ({
     savePrevFilters(appliedFilters);
   }, []);
 
-  const isStrategySelected = () => {
-    if (strategiesUsed === null || strategiesUsed === undefined) {
-      return false;
-    }
-    return Object.values(strategiesUsed).find(value => value === true);
-  };
-
-  const getStrategyText = () => {
-    let text = '';
-    const strategies = strategiesUsed;
-    const empty = isStrategySelected();
-    if (empty) {
-      Object.keys(strategies).forEach(strategy => {
-        if (strategies[strategy] === true) {
-          text += strategy + ', ';
-        }
-      });
-      if (text.length > 30) {
-        return text.substring(0, 30) + '...';
-      }
-      return text.substring(0, text.length - 2);
-    }
-    return 'Select Strategy';
-  };
-
   return (
     <View style={styles.base}>
       {useIsFocused() && (
@@ -67,7 +45,7 @@ const Filters = ({
           color={COLORS.blue}
           backBtn={true}
           navigation={navigation}
-          backScreen="tradesAnalysis"
+          backScreen={SCREEN_NAMES.TRADE_ANALYSIS_SCREEN}
         />
       )}
       <View style={styles.mainContainer}>
@@ -80,8 +58,10 @@ const Filters = ({
           size="medium"
           status={'primary'}
           appearance="outline"
-          onPress={() => navigation.navigate('selectStrategy')}>
-          {getStrategyText()}
+          onPress={() =>
+            navigation.navigate(SCREEN_NAMES.SELECT_STRATEGY_ANALYSIS_SCREEN)
+          }>
+          {getStrategyText(strategiesUsed)}
         </Button>
         <FilterInputButtons />
         <FilterInputFields />

@@ -1,68 +1,21 @@
+// Module imports
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Icon} from '@ui-kitten/components';
 
-// Import files
+// Files imports
 import Setting from '../../../screens/dashboard/setting';
 import {COLORS} from '../../../assets/theme';
-import styles from './styles';
 import AddNavStack from '../navStack/add';
 import AnalyseStack from '../navStack/analyse';
+import TabBar from './tabBar';
+import {SCREEN_NAMES, BOTTOM_NAV_HEADINGS} from '../../constants';
 
 const Tab = createBottomTabNavigator();
 
 const BottomNavStack = () => {
-  const TabBar = ({state, descriptors, navigation}) => {
-    const tabIcons = state.routes.map((route, index) => {
-      const {options} = descriptors[route.key];
-      const label = options.tabBarLabel;
-      const iconName =
-        route.name === 'add'
-          ? 'plus-circle'
-          : route.name === 'analyse'
-          ? 'options-2'
-          : route.name === 'strategy'
-          ? 'trending-up'
-          : 'settings';
-      const isFocused = state.index === index;
-      const onPress = () => {
-        const event = navigation.emit({
-          type: 'tabPress',
-          target: route.key,
-          canPreventDefault: true,
-        });
-        if (!isFocused && !event.defaultPrevented) {
-          navigation.navigate({name: route.name, merge: true});
-        }
-      };
-      return (
-        <TouchableOpacity
-          accessibilityRole="button"
-          accessibilityState={isFocused ? {selected: true} : {}}
-          accessibilityLabel={options.tabBarAccessibilityLabel}
-          testID={options.tabBarTestID}
-          onPress={onPress}
-          key={index}
-          style={{flex: 1, alignItems: 'center'}}>
-          <Icon
-            width={24}
-            height={24}
-            fill={isFocused ? COLORS.blue : COLORS.black}
-            name={iconName}
-          />
-          <Text style={{color: isFocused ? COLORS.blue : COLORS.black}}>
-            {label}
-          </Text>
-        </TouchableOpacity>
-      );
-    });
-    return <View style={styles.tabBar}>{tabIcons}</View>;
-  };
-
   return (
     <Tab.Navigator
-      initialRouteName="add"
+      initialRouteName={SCREEN_NAMES.ADD_SCREEN}
       tabBar={props => <TabBar {...props} />}
       screenOptions={{
         tabBarActiveTintColor: COLORS.blue,
@@ -70,31 +23,24 @@ const BottomNavStack = () => {
         headerShown: false,
       }}>
       <Tab.Screen
-        name="add"
+        name={SCREEN_NAMES.ADD_SCREEN}
         component={AddNavStack}
         options={{
-          tabBarLabel: 'Add',
+          tabBarLabel: BOTTOM_NAV_HEADINGS.ADD,
         }}
       />
       <Tab.Screen
-        name="analyse"
+        name={SCREEN_NAMES.ANALYSE_SCREEN}
         component={AnalyseStack}
         options={{
-          tabBarLabel: 'Analyse',
+          tabBarLabel: BOTTOM_NAV_HEADINGS.ANALYSE,
         }}
       />
-      {/* <Tab.Screen
-        name="strategy"
-        component={Strategy}
-        options={{
-          tabBarLabel: 'Stategy',
-        }}
-      /> */}
       <Tab.Screen
-        name="setting"
+        name={SCREEN_NAMES.SETTINGS_SCREEN}
         component={Setting}
         options={{
-          tabBarLabel: 'Setting',
+          tabBarLabel: BOTTOM_NAV_HEADINGS.SETTING,
         }}
       />
     </Tab.Navigator>

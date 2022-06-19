@@ -1,16 +1,18 @@
+// Module imports
 import React from 'react';
 import {View} from 'react-native';
 import {Button} from '@ui-kitten/components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-// Import files
+// File imports
 import {COLORS} from '../../../../../assets/theme';
 import {
   setFilters,
   resetState,
   refetchTrades,
 } from '../../../../../redux/actions/analysis';
+import {SCREEN_NAMES} from '../../../../../navigation/constants';
 
 const ApplyFilters = ({
   navigation,
@@ -29,7 +31,7 @@ const ApplyFilters = ({
       bookmark: analysis.bookmark,
     });
     refetchTrades();
-    navigation.navigate('tradesAnalysis');
+    navigation.navigate(SCREEN_NAMES.TRADE_ANALYSIS_SCREEN);
   };
   return (
     <View style={{flexDirection: 'row'}}>

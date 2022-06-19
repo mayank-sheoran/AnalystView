@@ -1,4 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
+import {COLORS} from '../../../../assets/theme';
 var width = Dimensions.get('window').width; //full width
 
 export default StyleSheet.create({
@@ -12,7 +13,6 @@ export default StyleSheet.create({
   feature: {
     flex: 1,
     position: 'absolute',
-    // left: 0,
     flexDirection: 'column',
     justifyContent: 'center',
     borderRadius: 6,
@@ -24,6 +24,6 @@ export default StyleSheet.create({
     top: '50%',
     height: 1,
     zIndex: -1,
-    backgroundColor: 'black',
+    backgroundColor: COLORS.black,
   },
 });

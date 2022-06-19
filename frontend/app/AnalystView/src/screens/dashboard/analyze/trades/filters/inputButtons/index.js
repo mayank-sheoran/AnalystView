@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Text, View} from 'react-native';
 import {Button} from '@ui-kitten/components';
 import {connect} from 'react-redux';

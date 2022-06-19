@@ -1,3 +1,4 @@
+// Module imports
 import React from 'react';
 import {View} from 'react-native';
 import {Button} from '@ui-kitten/components';
@@ -6,11 +7,11 @@ import {bindActionCreators} from 'redux';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 
-// Import files
+// File imports
 import styles from './styles';
 import {showDatePicker, setDate} from '../../../../redux/actions/add';
 
-const SelectDate = ({add, setDate, showDatePicker}) => {
+const SelectDate = ({date, datePicker, setDate, showDatePicker}) => {
   return (
     <View style={styles.base}>
       <Button
@@ -18,13 +19,13 @@ const SelectDate = ({add, setDate, showDatePicker}) => {
         size="medium"
         appearance="outline"
         onPress={() => showDatePicker(true)}>
-        {moment(add.date).format('DD-MMM-YYYY')}
+        {moment(date).format('DD-MMM-YYYY')}
       </Button>
       <DatePicker
         modal
         style={styles.datePicker}
-        open={add.show.datePicker}
-        date={add.date}
+        open={datePicker}
+        date={date}
         onConfirm={date => {
           setDate(date);
           showDatePicker(false);
@@ -39,7 +40,9 @@ const SelectDate = ({add, setDate, showDatePicker}) => {
 
 const mapStateToProps = state => {
   const {add} = state;
-  return {add};
+  const {date, show} = add;
+  const {datePicker} = show;
+  return {date, datePicker};
 };
 
 const mapDispatchToProps = dispatch =>

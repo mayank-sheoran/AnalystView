@@ -1,10 +1,11 @@
+// Module imports
 import React from 'react';
 import {View} from 'react-native';
 import {Icon, Button} from '@ui-kitten/components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-// Import files
+// File imports
 import styles from './styles';
 import {setTradeType, setTrade} from '../../../../redux/actions/add';
 import {TRADE_TYPE, TRADE} from '../constants';
@@ -70,7 +71,8 @@ const TradeTypeBtn = ({trade, tradeType, setTrade, setTradeType}) => {
 
 const mapStateToProps = state => {
   const {add} = state;
-  return {trade: add.trade, tradeType: add.tradeType};
+  const {trade, tradeType} = add;
+  return {trade, tradeType};
 };
 
 const mapDispatchToProps = dispatch =>

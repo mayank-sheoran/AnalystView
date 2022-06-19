@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+// Module imports
 import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   ScrollView,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
@@ -13,17 +13,17 @@ import {
 import {CheckBox, Button, Input} from '@ui-kitten/components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import auth from '@react-native-firebase/auth';
 
-// Import Files
+// File imports
 import Loading from '../../../../components/loading';
 import styles from './styles';
 import {HEADER_THEME} from '../../../../components/header/constants';
 import Header from '../../../../components/header';
 import {COLORS} from '../../../../assets/theme';
+import {SCREEN_NAMES} from '../../../../navigation/constants';
 import {setStrategiesUsed} from '../../../../redux/actions/add';
-import axios from 'axios';
 import SearchBar from '../../../../components/searchBar';
+import {fetchUserStrategies, handleAddNewStrategy} from './utils';
 
 const SelectStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
   const [loading, setLoading] = useState(false);
@@ -31,29 +31,9 @@ const SelectStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
   const [searchedStrategies, setSearchedStrategies] = useState([]);
   const [newStrategy, setNewStrategy] = useState('');
 
-  const fetchUserStrategies = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        'http://192.168.29.84:3001/getAllStrategies',
-        {
-          userId: auth().currentUser.uid,
-        },
-      );
-      if (response.data.isError) {
-        Alert.alert('Error', response.data.errMessage);
-      } else {
-        setAllStrategies(response.data.data);
-        setSearchedStrategies(response.data.data);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Something went wrong');
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    fetchUserStrategies();
+    const params = {setLoading, setAllStrategies, setSearchedStrategies};
+    fetchUserStrategies(params);
   }, []);
 
   const getUserStrategiesCard = searchedStrategies.map(strategy => {
@@ -74,29 +54,6 @@ const SelectStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
     );
   });
 
-  const handleAddNewStrategy = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        'http://192.168.29.84:3001/addStrategy',
-        {
-          userId: auth().currentUser.uid,
-          strategy: newStrategy,
-        },
-      );
-      if (response.data.isError) {
-        Alert.alert('Error', response.data.errMessage);
-      } else {
-        setAllStrategies([...allStrategies, newStrategy]);
-        setSearchedStrategies([...allStrategies, newStrategy]);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Something went wrong');
-    }
-    setNewStrategy('');
-    setLoading(false);
-  };
-
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
       <Header
@@ -105,7 +62,7 @@ const SelectStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
         color={COLORS.white}
         backBtn={true}
         navigation={navigation}
-        backScreen="addToJournal"
+        backScreen={SCREEN_NAMES.ADD_TO_JOURNAL_SCREEN}
       />
       <KeyboardAvoidingView
         keyboardVerticalOffset={-50}
@@ -129,7 +86,16 @@ const SelectStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
                   onChangeText={nextValue => setNewStrategy(nextValue)}
                 />
                 <Button
-                  onPress={handleAddNewStrategy}
+                  onPress={() =>
+                    handleAddNewStrategy({
+                      setLoading,
+                      newStrategy,
+                      allStrategies,
+                      setAllStrategies,
+                      setSearchedStrategies,
+                      setNewStrategy,
+                    })
+                  }
                   style={{
                     width: '100%',
                     marginTop: 5,
@@ -149,7 +115,8 @@ const SelectStrategy = ({strategiesUsed, navigation, setStrategiesUsed}) => {
 
 const mapStateToProps = state => {
   const {add} = state;
-  return {strategiesUsed: add.strategiesUsed};
+  const {strategiesUsed} = add;
+  return {strategiesUsed};
 };
 
 const mapDispatchToProps = dispatch =>

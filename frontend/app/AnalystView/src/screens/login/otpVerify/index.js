@@ -1,87 +1,55 @@
+// Module imports
 import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import auth from '@react-native-firebase/auth';
-import axios from 'axios';
+import {connect} from 'react-redux';
 
 // Import Files
 import Header from '../../../components/header';
-import notify from '../../../components/notify';
 import styles from './styles';
 import {COLORS} from '../../../assets/theme';
 import Loading from '../../../components/loading';
+import {handleCodeFilled, reSendOtp} from './utils';
+import {HEADER_DETAILS, PAGE_DETAILS} from './constants';
 
-const OtpVerify = ({route, navigation}) => {
+const OtpVerify = ({route, navigation, login}) => {
   const [confirm, setConfirm] = useState(route.params.confirm);
   const [loading, setLoading] = useState(false);
-  const [wait, setWait] = useState(0);
-  const [triggerWait, setTriggerWait] = useState(false);
-  const resentOtpText = wait === 0 ? 'Request Again' : `Wait ${wait} sec`;
+
+  // TIMER STATES
+  const [seconds, setSeconds] = useState(0);
+  const [resendActive, setResendActive] = useState(true);
+
+  const resentOtpText = resendActive
+    ? PAGE_DETAILS.REQUEST_AGAIN
+    : PAGE_DETAILS.WAIT(seconds);
   const {phoneNumber} = route.params;
 
-  const handleCodeFilled = async code => {
-    setLoading(true);
-    try {
-      await confirm.confirm(code);
-    } catch (error) {
-      setLoading(false);
-      notify({heading: 'Error', subHeading: 'Wrong OTP'});
-    }
-  };
-
   useEffect(() => {
-    let interval = setInterval(() => {
-      setWait(lastWait => {
-        if (lastWait === 0) {
-          return 0;
-        }
-        lastWait <= 1 && clearInterval(interval);
-        return lastWait - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [triggerWait]);
-
-  const reSendOtp = async () => {
-    if (wait !== 0) {
-      return null;
-    }
-    setLoading(true);
-    try {
-      const confirmation = await auth().signInWithPhoneNumber(
-        phoneNumber,
-        true,
-      );
-      if (confirmation) {
-        setConfirm(confirmation);
-        setLoading(false);
-        setWait(20);
-        setTriggerWait(!triggerWait);
-      }
-    } catch (err) {
-      setLoading(false);
-      if (err.code === 'auth/quota-exceeded') {
-        notify({heading: 'Error', subHeading: 'SMS Quota Exceeded'});
-      } else if (err.code === 'auth/user-disabled') {
-        notify({heading: 'Error', subHeading: 'BANNED'});
-      } else {
-        console.log('Unexpected Error.' + err.code);
-      }
-    }
-  };
+    const timer =
+      seconds > 0 &&
+      setInterval(() => {
+        setSeconds(seconds - 1);
+      }, 1000);
+    setResendActive(seconds <= 0);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [seconds]);
 
   return (
     <View style={styles.baseContainer}>
       <Header
-        title="Verify"
+        title={HEADER_DETAILS.TITLE}
         backBtn={true}
         navigation={navigation}
-        backScreen="welcome"
+        backScreen={HEADER_DETAILS.BACKSCREEN}
         color={COLORS.blue}
-        theme="dark"
+        theme={HEADER_DETAILS.THEME}
       />
+
       <View style={styles.otpVerifyContainer}>
-        <Text style={styles.text}>{`Code sent to ${phoneNumber}`}</Text>
+        <Text style={styles.text}>{PAGE_DETAILS.CODE_SENT(phoneNumber)}</Text>
         <Loading loading={loading}>
           <OTPInputView
             style={styles.otpInput}
@@ -89,25 +57,45 @@ const OtpVerify = ({route, navigation}) => {
             autoFocusOnLoad
             codeInputFieldStyle={styles.underlineStyleBase}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
-            onCodeFilled={handleCodeFilled}
+            onCodeFilled={code => handleCodeFilled({code, confirm, setLoading})}
           />
         </Loading>
       </View>
+
       <View style={styles.resendOtpContainer}>
-        <Text style={{color: COLORS.dark_grey}}>Didn't recieved code?</Text>
-        <TouchableOpacity onPress={reSendOtp}>
-          <Text
-            style={[
-              {marginLeft: 5},
-              wait === 0 && {color: COLORS.black},
-              wait !== 0 && {color: COLORS.red},
-            ]}>
+        <Text style={{color: COLORS.dark_grey}}>
+          {PAGE_DETAILS.CODE_NOT_RECIEVED}
+        </Text>
+        {resendActive && (
+          <TouchableOpacity
+            onPress={() =>
+              reSendOtp({
+                phoneNumber,
+                login,
+                setResendActive,
+                setConfirm,
+                setLoading,
+                setSeconds,
+              })
+            }>
+            <Text style={{marginLeft: 5, color: COLORS.black}}>
+              {resentOtpText}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {!resendActive && (
+          <Text style={{marginLeft: 5, color: COLORS.red}}>
             {resentOtpText}
           </Text>
-        </TouchableOpacity>
+        )}
       </View>
     </View>
   );
 };
 
-export default OtpVerify;
+const mapStateToProps = state => {
+  const {login} = state;
+  return {login};
+};
+
+export default connect(mapStateToProps, null)(OtpVerify);

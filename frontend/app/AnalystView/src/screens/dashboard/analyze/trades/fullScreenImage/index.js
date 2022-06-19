@@ -1,11 +1,12 @@
-import {Image, TouchableOpacity, View, ScrollView} from 'react-native';
+// Module imports
+import {TouchableOpacity, View} from 'react-native';
 import {Icon} from '@ui-kitten/components';
 import React from 'react';
 import PhotoView from 'react-native-photo-view-ex';
 
-// Import files
+// File imports
 import styles from './styles';
-import {COLORS} from '../../../../../assets/theme';
+import {COLORS, ICONS} from '../../../../../assets/theme';
 
 const FullScreenImage = ({fullScreenImage, setFullScreenImage}) => {
   return (
@@ -27,7 +28,7 @@ const FullScreenImage = ({fullScreenImage, setFullScreenImage}) => {
             height: 40,
           }}
           fill={COLORS.black}
-          name="close-square-outline"
+          name={ICONS.close_square_outline}
         />
       </TouchableOpacity>
     </View>
